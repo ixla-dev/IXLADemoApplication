@@ -340,10 +340,7 @@ public partial class FormMain : Form
         btDeleteRowOrder.Enabled = enabled;
         btAddToOrder.Enabled = enabled;
         btProcessOrder.Enabled = enabled;
-        if(btStartProcess.Enabled)
-            btProcessOrder.Enabled = false;
-        else
-            btProcessOrder.Enabled = enabled;
+        btProcessOrder.Enabled = btStartProcess.Enabled ? false : enabled;
     }
 
 
