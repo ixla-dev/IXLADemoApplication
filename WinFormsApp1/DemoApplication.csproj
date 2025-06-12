@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>WinFormsApp1</RootNamespace>
+        <ApplicationIcon>Ixla-icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.16" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
+      <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+      <PackageReference Include="Npgsql" Version="9.0.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="HostedServices\" />
+      <Folder Include="Resources\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="DemoApplication.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DemoApplication.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="DemoApplication.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DemoApplication.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>

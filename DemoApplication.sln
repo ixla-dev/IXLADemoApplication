@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApplication", "WinFormsApp1\DemoApplication.csproj", "{31B9A547-C8D2-4B80-B5CA-4A30F99B66C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aida.Sdk.Mini", "Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj", "{A9A2D5A3-EE89-4329-B606-ABCA06964C3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31B9A547-C8D2-4B80-B5CA-4A30F99B66C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31B9A547-C8D2-4B80-B5CA-4A30F99B66C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31B9A547-C8D2-4B80-B5CA-4A30F99B66C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31B9A547-C8D2-4B80-B5CA-4A30F99B66C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9A2D5A3-EE89-4329-B606-ABCA06964C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9A2D5A3-EE89-4329-B606-ABCA06964C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9A2D5A3-EE89-4329-B606-ABCA06964C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9A2D5A3-EE89-4329-B606-ABCA06964C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
