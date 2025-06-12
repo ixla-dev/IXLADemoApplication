@@ -442,8 +442,8 @@ partial class FormMain
         Controls.Add(label1);
         Controls.Add(tbIpAddress);
         Controls.Add(btConnect);
-        Controls.Add(panelImage);
         Controls.Add(panelString);
+        Controls.Add(panelImage);
         Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "IXLA Demo Application";

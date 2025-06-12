@@ -9,6 +9,9 @@ using Aida.Sdk.Mini.Model;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using System.Data;
+using System.Xml;
+
+#nullable disable
 
 namespace WinFormsApp1;
 public partial class FormMain : Form
@@ -29,52 +32,100 @@ public partial class FormMain : Form
     private const string DGV_ORDER_COLUMN_NAME = "Entity_";
 
     private SearchJobTemplatesResultDto _templates;
-    bool _deviceConnected = false;
-    DeviceDB? _deviceDB;
+    private bool _deviceConnected = false;
+    private DeviceDB _deviceDb;
     private Image _defautlImage;
-
-    List<int> jobsId = new List<int>();
-
-    public TextBox? tbInfo;
 
     private int dgvOrderOriginalSize;
 
+#nullable disable
 
     public FormMain()
     {
         InitializeComponent();
 
         dgvOrderOriginalSize = dgvOrder.Width;
+        
+        _templates = new SearchJobTemplatesResultDto();
+        _defautlImage = null;
 
-        //tbInfo = new TextBox();
-        //tbInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        //tbInfo.Location = tbInfoGhost.Location;
-        //tbInfo.Name = "tbInfo";
-        //tbInfo.ReadOnly = true;
-        //tbInfo.Size = tbInfoGhost.Size;
-        //tbInfo.TabIndex = 9;
-        //tbInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-        //tbInfo.Visible = false;
-        //this.Controls.Add(tbInfo);
+        ReadConfiguration();
+
+        this.Closing += OnFormClosing;
     }
-
-    //public WriteTextSafe(string text)
-    //{
-    //    if (tbInfoGhost.InvokeRequired)
-    //    {
-    //        // Call this same method but append THREAD2 to the text
-    //        Action safeWrite = delegate { WriteTextSafe($"{text} (THREAD2)"); };
-    //        tbInfo.Invoke(safeWrite);
-    //    }
-    //    else
-    //        tbInfo.Text = text;
-    //}
-
 
     private void FormMain_Load(object sender, EventArgs e)
     {
         if (_defautlImage == null)
             _defautlImage = picImageToPrint.Image;
+    }
+
+    private void OnFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        SaveConfiguration();
+    }
+
+    const string XML_CONFIG_FILE = "DemoApplication.xml";
+    const string XML_ROOT = "IXLATool";
+    const string XML_IP_ADDRESS = "IpAddress";
+
+    private void ReadConfiguration()
+    {
+        // Read last configuration
+        XmlDocument xd = new XmlDocument();
+        //reading from the file
+        try
+        {
+            xd.Load(Application.StartupPath + "\\" + XML_CONFIG_FILE);
+
+            XmlNode root = xd.SelectSingleNode(XML_ROOT);
+
+            if (root != null)
+            {
+                // Leggo configurazione di rete
+                tbIpAddress.Text = root[XML_IP_ADDRESS].InnerText;
+            }
+        }
+        catch (Exception ex)
+        {
+            tbIpAddress.Text = @"0.0.0.0";
+
+            //if (ex is FileNotFoundException)
+            //    // Se non c'è il file, lascio il default !
+            //    MessageBox.Show("Error on read configuration file !\n\n" + ex.Message, POPUP_TITLE);
+
+            //else if (ex is NullReferenceException)
+            //    // Se non c'è il file, lascio il default !
+            //    MessageBox.Show("Error on read configuration file !\n\n" + ex.Message, POPUP_TITLE);
+
+            //else
+            //    // Se il file è stato manomesso, lascio il default !
+            //    MessageBox.Show("Error file configuration !\n\n" + ex.Message, POPUP_TITLE);
+        }
+    }
+
+    private void SaveConfiguration()
+    {
+        // Salvo la configurazione
+        XmlDocument xmlDoc = new XmlDocument();
+        XmlNode docNode = xmlDoc.CreateXmlDeclaration("1.0", "UTF-8", null);
+        xmlDoc.AppendChild(docNode);
+
+        XmlNode rootNode = xmlDoc.CreateElement(XML_ROOT);
+        xmlDoc.AppendChild(rootNode);
+
+        // IP Address parameters
+        XmlNode xNode = xmlDoc.CreateElement(XML_IP_ADDRESS);
+        xNode.InnerText = tbIpAddress.Text;
+        rootNode.AppendChild(xNode);
+
+        try
+        {
+            xmlDoc.Save(Application.StartupPath + "\\" + XML_CONFIG_FILE);
+        }
+        catch (Exception /*ex*/)
+        {
+        }
     }
 
     private void CheckStatus(IntegrationApi api)
@@ -180,15 +231,15 @@ public partial class FormMain : Form
                 btConnect.BackColor = Color.LightGreen;
 
                 // Connecting to the device DB
-                if (_deviceDB == null)
+                if (_deviceDb == null)
                 {
-                    _deviceDB = new DeviceDB(tbIpAddress.Text);
-                    _deviceDB.Connect();
+                    _deviceDb = new DeviceDB(tbIpAddress.Text);
+                    _deviceDb.Connect();
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                MessageBox.Show(this, "Device not connected or incorrect IP address !", POPUP_TITLE,
+                MessageBox.Show(this, @"Device not connected or incorrect IP address !", POPUP_TITLE,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -198,10 +249,10 @@ public partial class FormMain : Form
 
             var api = new IntegrationApi(GetUrl());
  
-            if (_deviceDB != null)
+            if (_deviceDb != null)
             {
-                _deviceDB.Disconnect();
-                _deviceDB = null;
+                _deviceDb.Disconnect();
+                _deviceDb = null;
             }
 
             _templates = null;
@@ -239,7 +290,7 @@ public partial class FormMain : Form
         tbInfoGhost.Text += value;
     }
 
-    private ClientWebHost? _webHost;
+    private ClientWebHost _webHost;
 
     private void btStartWebHook_Click(object sender, EventArgs e)
     {
@@ -451,7 +502,10 @@ public partial class FormMain : Form
         //     if (ii == listEntity[ii].EntityIndex)
         //         entity = listEntity[ii];
 
+        tbStringToPrint.TextChanged -= tbStringToPrint_TextChanged; 
         tbStringToPrint.Text = "";
+        tbStringToPrint.TextChanged += tbStringToPrint_TextChanged;
+
         if (dgvr.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.String))
         {
             panelImage.Visible = false;
@@ -460,7 +514,8 @@ public partial class FormMain : Form
                 tbStringToPrint.Text = dgvr.Cells[(int)DgvColumns.StringToPrint].Value.ToString();
         }
         picImageToPrint.Image = _defautlImage;
-        if (dgvr.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.Image))
+        if (dgvr.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.Image) ||
+            dgvr.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.InkjetImage))
         {
             panelString.Visible = false;
             panelImage.Visible = true;
@@ -489,7 +544,7 @@ public partial class FormMain : Form
         int idxCombo = comboTemplates.SelectedIndex;
        
         // Build the string for create the INSERT INTO DB command
-        _deviceDB.CreateNewCommand();
+        _deviceDb.CreateNewCommand();
         
         foreach (DataGridViewRow row in dgvEntity.Rows)
         {
@@ -497,39 +552,39 @@ public partial class FormMain : Form
                  row.Cells[(int)DgvColumns.StringToPrint].Value.ToString() != "") ||
                 row.Cells[(int)DgvColumns.PathImage].Value != null)
             {
-                string? fieldName = row.Cells[(int)DgvColumns.UniqueName].Value.ToString();
-                _deviceDB.AddParameter(fieldName);
+                string fieldName = row.Cells[(int)DgvColumns.UniqueName].Value.ToString();
+                _deviceDb.AddParameter(fieldName);
             }
         }
 
         // Add job_status parameter
-        _deviceDB.AddParameter("job_status");
+        _deviceDb.AddParameter("job_status");
 
         // Add optional correlation_id parameters
-        _deviceDB.AddParameter("correlation_id");
+        _deviceDb.AddParameter("correlation_id");
 
         var api = new IntegrationApi(GetUrl());
         {
             var dbTable = api.GetDataExchangeTableDefinition((int)_templates.Items[idxCombo].Id);
 
             // Compile the string to send at DB
-            _deviceDB.BuildCommand(dbTable.TableName);
+            _deviceDb.BuildCommand(dbTable.TableName);
 
             foreach (DataGridViewRow row in dgvEntity.Rows)
             {
-                // if (row.Cells[(int)DgvCulumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.String))
+                // if (row.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.String))
                 {
                     if (row.Cells[(int)DgvColumns.StringToPrint].Value != null && row.Cells[(int)DgvColumns.StringToPrint].Value.ToString() != "")
                     {
-                        _deviceDB.SetParameterString(row.Cells[(int)DgvColumns.UniqueName].Value.ToString(), row.Cells[(int)DgvColumns.StringToPrint].Value.ToString());
+                        _deviceDb.SetParameterString(row.Cells[(int)DgvColumns.UniqueName].Value.ToString(), row.Cells[(int)DgvColumns.StringToPrint].Value.ToString());
                     }
                 }
 
-                // if (row.Cells[(int)DgvCulumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.Image))
+                // if (row.Cells[(int)DgvColumns.ValueType].Value.ToString() == nameof(EntityFieldValueType.Image))
                 {
                     if (row.Cells[(int)DgvColumns.PathImage].Value != null)
                     {
-                        _deviceDB.SetParameterImage(row.Cells[(int)DgvColumns.UniqueName].Value.ToString(), row.Cells[(int)DgvColumns.PathImage].Value.ToString());
+                        _deviceDb.SetParameterImage(row.Cells[(int)DgvColumns.UniqueName].Value.ToString(), row.Cells[(int)DgvColumns.PathImage].Value.ToString());
                     }
                 }
             }
@@ -537,11 +592,11 @@ public partial class FormMain : Form
             _correlationId++;
             var correlationId = $"job:{_correlationId:0000}";
             // Set correlation_id and job_status parameter
-            _deviceDB.SetParameterString("correlation_Id", correlationId);
-            _deviceDB.SetParameterString("job_status", "Waiting");
+            _deviceDb.SetParameterString("correlation_Id", correlationId);
+            _deviceDb.SetParameterString("job_status", "Waiting");
 
             // Execute the command (add item at DB) 
-            _deviceDB.ExecuteCmd();
+            _deviceDb.ExecuteCmd();
         }
     }
 
@@ -561,53 +616,55 @@ public partial class FormMain : Form
             foreach (DataGridViewRow rowOrder in dgvOrder.Rows)
             {
                 // Build the string for create the INSERT INTO DB command 
-                _deviceDB.CreateNewCommand();
+                _deviceDb.CreateNewCommand();
    
                 for(int iiEntity = 0; iiEntity < _listEntity.Count; iiEntity++) 
                 {
                     if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String)
                     {
                         string fieldName = dgvOrder.Columns[iiEntity].Name;
-                        _deviceDB.AddParameter(fieldName);
+                        _deviceDb.AddParameter(fieldName);
                     }
                     
-                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.Image &&
+                    if ((_listEntity[iiEntity].ValueType == EntityFieldValueType.Image ||
+                         _listEntity[iiEntity].ValueType == EntityFieldValueType.InkjetImage) &&
                         rowOrder.Cells[iiEntity].Value.ToString() != DEFAULT_IMAGE)
                     {
                         string fieldName = dgvOrder.Columns[iiEntity].Name;
-                        _deviceDB.AddParameter(fieldName);
+                        _deviceDb.AddParameter(fieldName);
                     }
                 }
                 
                 // Add job_status parameter
-                _deviceDB.AddParameter("job_status");
+                _deviceDb.AddParameter("job_status");
                 
                 // Add optional correlation_id parameters
-                _deviceDB.AddParameter("correlation_id");
+                _deviceDb.AddParameter("correlation_id");
 
                 // Compile the string to send at DB
-                _deviceDB.BuildCommand(dbTable.TableName);
+                _deviceDb.BuildCommand(dbTable.TableName);
                 
                 for(int iiEntity = 0; iiEntity < _listEntity.Count; iiEntity++) 
                 {
                     if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String)
                     {
-                        _deviceDB.SetParameterString(dgvOrder.Columns[iiEntity].Name, rowOrder.Cells[iiEntity].Value.ToString());
+                        _deviceDb.SetParameterString(dgvOrder.Columns[iiEntity].Name, rowOrder.Cells[iiEntity].Value.ToString());
                     }
                 
-                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.Image &&
+                    if ((_listEntity[iiEntity].ValueType == EntityFieldValueType.Image ||
+                        _listEntity[iiEntity].ValueType == EntityFieldValueType.InkjetImage) &&
                         rowOrder.Cells[iiEntity].Value.ToString() != DEFAULT_IMAGE)
                     {
-                        _deviceDB.SetParameterImage(dgvOrder.Columns[iiEntity].Name, rowOrder.Cells[iiEntity].Value.ToString());
+                        _deviceDb.SetParameterImage(dgvOrder.Columns[iiEntity].Name, rowOrder.Cells[iiEntity].Value.ToString());
                     }
                 }
 
                 _correlationId++;
                 var correlationId = $"job:{_correlationId:0000}";
-                _deviceDB.SetParameterString("correlation_Id", correlationId);
-                _deviceDB.SetParameterString("job_status", "Waiting");
+                _deviceDb.SetParameterString("correlation_Id", correlationId);
+                _deviceDb.SetParameterString("job_status", "Waiting");
             
-                _deviceDB.ExecuteCmd();
+                _deviceDb.ExecuteCmd();
             }
         }
 
@@ -623,7 +680,7 @@ public partial class FormMain : Form
         {
             if (row.Cells[(int)DgvColumns.StringToPrint].Value != null)
                 dgvOrder.Rows[newRow].Cells[iiCol].Value = row.Cells[(int)DgvColumns.StringToPrint].Value.ToString();
-            if (_listEntity[iiCol].ValueType == EntityFieldValueType.Image)
+            if (_listEntity[iiCol].ValueType == EntityFieldValueType.Image || _listEntity[iiCol].ValueType == EntityFieldValueType.InkjetImage)
             {
                 if (row.Cells[(int)DgvColumns.PathImage].Value == null)
                 {

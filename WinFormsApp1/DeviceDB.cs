@@ -96,27 +96,26 @@ public class DeviceDB
         // var cmdInsert = $@"INSERT INTO {dbTable.TableName} (""correlation_id""{fieldList}) VALUES ( @correlation_id{valuePlaceHolders})";
         var insertCommand = $@"INSERT INTO {tableName} ({_fieldList}) VALUES ( {_valuePlaceHolders})";
 
+        if( _command != null )
+            _command.Dispose();
+            
         _command = new NpgsqlCommand(insertCommand, _dbConnection);
     }
 
     public void SetParameterString(string parameterName, string value)
     {
-        NpgsqlParameter parameter;
-        
         if(parameterName[0] == '@')
-            parameter = _command.Parameters.AddWithValue(parameterName,((string)value).ToString());
+            _command.Parameters.AddWithValue(parameterName,((string)value).ToString());
         else
-            parameter = _command.Parameters.AddWithValue($"@{parameterName}",((string)value).ToString());
+            _command.Parameters.AddWithValue($"@{parameterName}",((string)value).ToString());
     }
 
     public void SetParameterImage(string parameterName, string pathFilename)
     {
-        NpgsqlParameter parameter;
-        
         if( parameterName[0] == '@')
-            parameter = _command.Parameters.AddWithValue(parameterName, File.ReadAllBytes(pathFilename));
+            _command.Parameters.AddWithValue(parameterName, File.ReadAllBytes(pathFilename));
         else
-            parameter = _command.Parameters.AddWithValue($"@{parameterName}", File.ReadAllBytes(pathFilename));
+            _command.Parameters.AddWithValue($"@{parameterName}", File.ReadAllBytes(pathFilename));
     }
 
     public void ExecuteCmd()
