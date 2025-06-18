@@ -85,11 +85,12 @@ partial class FormMain
         // 
         // tbIpAddress
         // 
+        tbIpAddress.AcceptsReturn = true;
         tbIpAddress.Location = new System.Drawing.Point(391, 8);
         tbIpAddress.Name = "tbIpAddress";
         tbIpAddress.Size = new System.Drawing.Size(114, 23);
         tbIpAddress.TabIndex = 1;
-        tbIpAddress.Text = "192.168.3.104";
+        tbIpAddress.Text = "0.0.0.0";
         tbIpAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
         // 
         // label1
