@@ -217,6 +217,7 @@ partial class FormMain
         Type.HeaderText = "Entity Type";
         Type.Name = "Type";
         Type.ReadOnly = true;
+        Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
         Type.Width = 75;
         // 
         // Name
@@ -224,6 +225,7 @@ partial class FormMain
         Name.HeaderText = "Entity Name";
         Name.Name = "Name";
         Name.ReadOnly = true;
+        Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
         Name.Width = 233;
         // 
         // UniqueEntityName
@@ -231,6 +233,7 @@ partial class FormMain
         UniqueEntityName.HeaderText = "Unique Entity Name";
         UniqueEntityName.Name = "UniqueEntityName";
         UniqueEntityName.ReadOnly = true;
+        UniqueEntityName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
         UniqueEntityName.Visible = false;
         UniqueEntityName.Width = 100;
         // 
@@ -240,6 +243,7 @@ partial class FormMain
         Value.HeaderText = "Entity String Value";
         Value.Name = "Value";
         Value.ReadOnly = true;
+        Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
         Value.Width = 187;
         // 
         // ImageToPrint
@@ -255,6 +259,7 @@ partial class FormMain
         PathImage.HeaderText = "Path Image";
         PathImage.Name = "PathImage";
         PathImage.ReadOnly = true;
+        PathImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
         PathImage.Visible = false;
         PathImage.Width = 100;
         // 
@@ -500,12 +505,12 @@ partial class FormMain
     private System.Windows.Forms.DataGridView dgvOrder;
     private System.Windows.Forms.Button btAddToOrder;
     private System.Windows.Forms.Button btProcessOrder;
-    private DataGridViewTextBoxColumn Type;
-    private DataGridViewTextBoxColumn Name;
-    private DataGridViewTextBoxColumn UniqueEntityName;
-    private DataGridViewTextBoxColumn Value;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Type;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Name;
+    private System.Windows.Forms.DataGridViewTextBoxColumn UniqueEntityName;
+    private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     private DataGridViewImageColumn ImageToPrint;
-    private DataGridViewTextBoxColumn PathImage;
+    private System.Windows.Forms.DataGridViewTextBoxColumn PathImage;
     private System.Windows.Forms.Button btClearOrder;
     private System.Windows.Forms.Button btDefaultImage;
     private System.Windows.Forms.Button btDefaultString;

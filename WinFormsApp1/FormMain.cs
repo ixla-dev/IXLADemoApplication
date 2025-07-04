@@ -368,6 +368,7 @@ public partial class FormMain : Form
                 newCol.Name = f.EntityName;
                 newCol.HeaderText = f.DisplayName;
                 newCol.ToolTipText = f.DisplayName;
+                newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
 
                 int cc = dgvOrder.Columns.Add(newCol);
                 widthColumns += newCol.Width;
@@ -480,6 +481,7 @@ public partial class FormMain : Form
         btStartProcess.Enabled = true;
         cbNoLaser.Enabled = true;
         btProcessCard.Enabled = false;
+        btStopProcess.Enabled = false;
     }
 
     private int _lastRow = -1;
@@ -487,6 +489,9 @@ public partial class FormMain : Form
     {
         DataGridView dgv = (DataGridView)sender;
 
+        if (e.RowIndex == -1)
+            return;
+        
         DataGridViewRow dgvr = dgv.Rows[e.RowIndex];
 
         if (_lastRow != -1)
