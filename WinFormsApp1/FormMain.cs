@@ -172,7 +172,7 @@ public partial class FormMain : Form
             try
             {
                 // Get the list of the job templates present in the device
-                _templates = api.FindJobTemplates();
+                _templates = api.FindJobTemplates(pageSize:1000);
 
                 if (_templates.Total > 0)
                 {
