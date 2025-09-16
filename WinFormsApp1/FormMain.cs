@@ -31,6 +31,22 @@ public partial class FormMain : Form
     private const string DEFAULT_IMAGE = "Default Image";
     private const string DGV_ORDER_COLUMN_NAME = "Entity_";
 
+    private const string TRACK1_FIELD_NAME = "magnetic_track_1";
+    private const string TRACK2_FIELD_NAME = "magnetic_track_2";
+    private const string TRACK3_FIELD_NAME = "magnetic_track_3";   
+    private const string TRACK1_DB_WRITE_FIELD_NAME = "magnetic_track_1_w";
+    private const string TRACK2_DB_WRITE_FIELD_NAME = "magnetic_track_2_w";
+    private const string TRACK3_DB_WRITE_FIELD_NAME = "magnetic_track_3_w";   
+    private const string TRACK1_DB_READ_FIELD_NAME  = "magnetic_track_1_r";
+    private const string TRACK2_DB_READ_FIELD_NAME  = "magnetic_track_2_r";
+    private const string TRACK3_DB_READ_FIELD_NAME  = "magnetic_track_3_r";
+    
+    private const string TRACK1_DEFAULT_STRING = "TRACK100000001";
+    private const string TRACK2_DEFAULT_STRING = "1234567890";
+    private const string TRACK3_DEFAULT_STRING = "1234567890123467890";
+
+    private const string TYPE_FIELD_STRING = "String";
+    
     private SearchJobTemplatesResultDto _templates;
     private bool _deviceConnected = false;
     private DeviceDB _deviceDb;
@@ -354,20 +370,20 @@ public partial class FormMain : Form
 
             // Check Template Entity
             _listEntity = api.GetEntityDescriptorsByJobTemplateId(id);// Async(id).ConfigureAwait(false);
-            foreach (var f in _listEntity)
+            foreach (var entity in _listEntity)
             {
-                if (f.ValueType == EntityFieldValueType.String)
+                if (entity.ValueType == EntityFieldValueType.String)
                 {
-                    dgvEntity.Rows.Add(f.ValueType, f.DisplayName, f.EntityName, f.DisplayName);
-                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = f.DisplayName;
+                    dgvEntity.Rows.Add(entity.ValueType, entity.DisplayName, entity.EntityName, entity.DisplayName);
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = entity.DisplayName;
                 }
                 else
-                    dgvEntity.Rows.Add(f.ValueType, f.DisplayName, f.EntityName);
+                    dgvEntity.Rows.Add(entity.ValueType, entity.DisplayName, entity.EntityName);
 
                 var newCol = new DataGridViewTextBoxColumn();
-                newCol.Name = f.EntityName;
-                newCol.HeaderText = f.DisplayName;
-                newCol.ToolTipText = f.DisplayName;
+                newCol.Name = entity.EntityName;
+                newCol.HeaderText = entity.DisplayName;
+                newCol.ToolTipText = entity.DisplayName;
                 newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
 
                 int cc = dgvOrder.Columns.Add(newCol);
@@ -376,8 +392,83 @@ public partial class FormMain : Form
                 iiRow++;
             }
 
-            //if( widthColumns < dgvOrder.Width)
-            //    dgvOrder.Width = widthColumns;
+            var Job = _templates.Items[combo.SelectedIndex];
+
+            // Add the mag tracks field
+            // I add the 3 magnetic strings to the Entity list for convenience
+            if (Job.MagStripeConfiguration.Operations != MagneticStripeOperations.None)
+            {
+                EntityDescriptor magneticFakeEntity;
+                
+                if (Job.MagStripeConfiguration.Track1Enabled ?? false)
+                {
+                    magneticFakeEntity = new()
+                    {
+                        ValueType = EntityFieldValueType.String,
+                        EntityName = TRACK1_DB_WRITE_FIELD_NAME,
+                        DisplayName = TRACK1_DEFAULT_STRING,
+                    };
+                    _listEntity.Add(magneticFakeEntity);
+                    
+                    dgvEntity.Rows.Add(TYPE_FIELD_STRING, TRACK1_DEFAULT_STRING, magneticFakeEntity.EntityName, magneticFakeEntity.DisplayName);
+                    dgvEntity.Rows[iiRow++].Cells[(int)DgvColumns.StringToPrint].ToolTipText = magneticFakeEntity.DisplayName;
+
+                    var newCol = new DataGridViewTextBoxColumn();
+                    newCol.Name = TRACK1_DB_WRITE_FIELD_NAME;
+                    newCol.HeaderText = TRACK1_FIELD_NAME;
+                    newCol.ToolTipText = TRACK1_FIELD_NAME;
+                    newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    int cc = dgvOrder.Columns.Add(newCol);
+                    widthColumns += newCol.Width;
+                }
+                
+                if (Job.MagStripeConfiguration.Track2Enabled ?? false)
+                {
+                    magneticFakeEntity = new()
+                    {
+                        ValueType = EntityFieldValueType.String,
+                        EntityName = TRACK2_DB_WRITE_FIELD_NAME,
+                        DisplayName = TRACK2_DEFAULT_STRING,
+                    };
+                    _listEntity.Add(magneticFakeEntity);
+                    
+                    dgvEntity.Rows.Add(TYPE_FIELD_STRING, TRACK2_DEFAULT_STRING, magneticFakeEntity.EntityName, magneticFakeEntity.DisplayName);
+                    dgvEntity.Rows[iiRow++].Cells[(int)DgvColumns.StringToPrint].ToolTipText = magneticFakeEntity.DisplayName;
+
+                    var newCol = new DataGridViewTextBoxColumn();
+                    newCol.Name = TRACK2_DB_WRITE_FIELD_NAME;
+                    newCol.HeaderText = TRACK2_FIELD_NAME;
+                    newCol.ToolTipText = TRACK2_FIELD_NAME;
+                    newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    int cc = dgvOrder.Columns.Add(newCol);
+                    widthColumns += newCol.Width;
+                }
+                
+                if (Job.MagStripeConfiguration.Track3Enabled ?? false)
+                {
+                    magneticFakeEntity = new()
+                    {
+                        ValueType = EntityFieldValueType.String,
+                        EntityName = TRACK3_DB_WRITE_FIELD_NAME,
+                        DisplayName = TRACK3_DEFAULT_STRING,
+                    };
+                    _listEntity.Add(magneticFakeEntity);
+                    
+                    dgvEntity.Rows.Add(TYPE_FIELD_STRING, TRACK3_DEFAULT_STRING, magneticFakeEntity.EntityName, magneticFakeEntity.DisplayName);
+                    dgvEntity.Rows[iiRow++].Cells[(int)DgvColumns.StringToPrint].ToolTipText = magneticFakeEntity.DisplayName;
+
+                    var newCol = new DataGridViewTextBoxColumn();
+                    newCol.Name = TRACK3_DB_WRITE_FIELD_NAME;
+                    newCol.HeaderText = TRACK3_FIELD_NAME;
+                    newCol.ToolTipText = TRACK3_FIELD_NAME;
+                    newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    int cc = dgvOrder.Columns.Add(newCol);
+                    widthColumns += newCol.Width;
+                }
+            }    
 
             if (_listEntity.Count > 0)
                 EnableEntityControls(true);
@@ -555,12 +646,19 @@ public partial class FormMain : Form
         {
             if ((row.Cells[(int)DgvColumns.StringToPrint].Value != null &&
                  row.Cells[(int)DgvColumns.StringToPrint].Value.ToString() != "") ||
-                row.Cells[(int)DgvColumns.PathImage].Value != null)
+                 row.Cells[(int)DgvColumns.PathImage].Value != null)
             {
                 string fieldName = row.Cells[(int)DgvColumns.UniqueName].Value.ToString();
                 _deviceDb.AddParameter(fieldName);
             }
         }
+
+        // if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
+        // {
+        //     record.Fields.Add(new PersonalizationField("magnetic_track_1_w", $"ID {id}"));
+        //     record.Fields.Add(new PersonalizationField("magnetic_track_2_w", $"{id:00000000}"));
+        //     record.Fields.Add(new PersonalizationField("magnetic_track_3_w", $"{id:0000}"));
+        // }
 
         // Add job_status parameter
         _deviceDb.AddParameter("job_status");
@@ -702,7 +800,6 @@ public partial class FormMain : Form
             else
             {
                 dgvOrder.Rows[newRow].Cells[iiCol].Style.BackColor = Color.LightCyan;
-
             }
             iiCol++;
         }
