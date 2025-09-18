@@ -1,6 +1,5 @@
 using System.Resources;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Aida.Sdk.Mini;
 using Aida.Sdk.Mini.Api;
@@ -24,6 +23,20 @@ public partial class FormMain : Form
         StringToPrint,
         ImageToPrint,
         PathImage
+    }
+
+    
+    private struct BatchJob
+    {
+        public string TemplateName;
+        public List<Dictionary<string, JobFields>> listJobs;
+    }
+
+    private struct JobFields
+    {
+        public string Type;
+        public string Name;
+        public string Value;
     }
     
     private const string POPUP_TITLE = "IXLA Demo Application";
@@ -482,7 +495,8 @@ public partial class FormMain : Form
         btClearOrder.Enabled = enabled;
         btDeleteRowOrder.Enabled = enabled;
         btAddToOrder.Enabled = enabled;
-        btProcessOrder.Enabled = enabled;
+        btImportOrder.Enabled = enabled;
+        btExportOrder.Enabled = enabled;
         btProcessOrder.Enabled = btStartProcess.Enabled ? false : enabled;
     }
 
@@ -620,6 +634,37 @@ public partial class FormMain : Form
         }
 
         _lastRow = e.RowIndex;
+    }
+
+    private void dgvOrder_CellClick(object sender, DataGridViewCellEventArgs e)
+    {
+        DataGridView dgv = (DataGridView)sender;
+
+        if (e.RowIndex == -1)
+            return;
+        
+        DataGridViewRow dgvr = dgv.Rows[e.RowIndex];
+
+        var iiRow = 0;
+        foreach (DataGridViewCell column in dgvr.Cells)
+        {
+            foreach (var entity in _listEntity)
+            {
+                if (entity.ValueType == EntityFieldValueType.String)
+                {
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].Value = column.Value;
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = column.Value.ToString();
+                }
+
+                if (entity.ValueType == EntityFieldValueType.Image || entity.ValueType == EntityFieldValueType.InkjetImage)
+                {
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].Value = column.Value;
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.PathImage].Value = column.Value;
+                    dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = column.Value.ToString();
+                }
+            }
+            iiRow++;
+        }
     }
 
     private void picImageToPrint_Click(object sender, EventArgs e)
@@ -810,11 +855,6 @@ public partial class FormMain : Form
         dgvOrder.Rows.Clear();
     }
 
-    private void dgvOrder_CellClick(object sender, DataGridViewCellEventArgs e)
-    {
-
-    }
-
     private void btDefaultString_Click(object sender, EventArgs e)
     {
         DataGridViewRow row = dgvEntity.CurrentRow;
@@ -861,5 +901,264 @@ public partial class FormMain : Form
                 break;
             }
         }
+    }
+
+    private void btImportOrder_Click(object sender, EventArgs e)
+    {
+        var ofd = new OpenFileDialog();
+        ofd.Title = "Import Orders";
+        ofd.Filter = "Orders files (*.html)|*.html";
+        if (ofd.ShowDialog() == DialogResult.OK)
+        {
+            LoadJobsInXmlFile(ofd.FileName);
+        }
+    }
+
+    private void LoadJobsInXmlFile(string fileName)
+    {
+        // Read last configuration
+        XmlDocument xmlDoc = new XmlDocument();
+        //reading from the file
+        try
+        {
+            xmlDoc.Load(fileName);
+
+            XmlNode root = xmlDoc.SelectSingleNode(XML_ROOT_JOBS);
+
+            if (root != null)
+            {
+                XmlNode template = root.SelectSingleNode(XML_JOB);
+                if (template != null)
+                {
+                    XmlAttributeCollection attribs = template.Attributes;
+                    if (attribs.Count > 0)
+                    {
+                        string templateName = attribs[XML_JOB_NAME].Value;
+                        var inTable = comboTemplates.FindString(templateName);
+                        if (inTable != -1)
+                        {
+                            comboTemplates.SelectedIndex = inTable;
+                            Thread.Sleep(222);
+
+                            // Fill the rows in DataGridView
+                            dgvOrder.Rows.Clear();
+                            XmlNodeList rows = template.SelectNodes(XML_DOCUMENT);
+                            foreach (XmlNode row in rows)
+                            {
+                                int newRow = dgvOrder.Rows.Add();
+
+                                int iiCol = 0;
+                                XmlNodeList dataField = row.SelectNodes(XML_DATAFIELD);
+                                foreach (XmlNode data in dataField)
+                                {
+                                    XmlAttributeCollection dataAttribs = data.Attributes;
+                                    // foreach (XmlAttribute dataAttrib in dataAttribs)
+                                    {
+                                        dgvOrder.Rows[newRow].Cells[iiCol].Value = dataAttribs[XML_DATAFIELD_VALUE].Value;
+                                        iiCol++;
+                                    }
+
+                                    //     if (_listEntity[iiCol].ValueType == EntityFieldValueType.Image || _listEntity[iiCol].ValueType == EntityFieldValueType.InkjetImage)
+                                //     {
+                                //         if (row.Cells[(int)DgvColumns.PathImage].Value == null)
+                                //         {
+                                //             dgvOrder.Rows[newRow].Cells[iiCol].Value = DEFAULT_IMAGE;
+                                //             dgvOrder.Rows[newRow].Cells[iiCol].Style.BackColor = Color.LightGoldenrodYellow;
+                                //         }
+                                //         else
+                                //         {
+                                //             dgvOrder.Rows[newRow].Cells[iiCol].Value = row.Cells[(int)DgvColumns.PathImage].Value.ToString();
+                                //             dgvOrder.Rows[newRow].Cells[iiCol].ToolTipText = row.Cells[(int)DgvColumns.PathImage].Value.ToString();
+                                //             dgvOrder.Rows[newRow].Cells[iiCol].Style.BackColor = Color.LightGreen;
+                                //         }
+                                //     }
+                                //     else
+                                //     {
+                                //         dgvOrder.Rows[newRow].Cells[iiCol].Style.BackColor = Color.LightCyan;
+                                //     }
+                                }
+                            }
+                        }
+                        else
+                            MessageBox.Show(@"Template not configured in the unit or unit not connected", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            tbIpAddress.Text = @"0.0.0.0";
+
+            //if (ex is FileNotFoundException)
+            //    // Se non c'è il file, lascio il default !
+            //    MessageBox.Show("Error on read configuration file !\n\n" + ex.Message, POPUP_TITLE);
+
+            //else if (ex is NullReferenceException)
+            //    // Se non c'è il file, lascio il default !
+            //    MessageBox.Show("Error on read configuration file !\n\n" + ex.Message, POPUP_TITLE);
+
+            //else
+            //    // Se il file è stato manomesso, lascio il default !
+            //    MessageBox.Show("Error file configuration !\n\n" + ex.Message, POPUP_TITLE);
+        }
+    }
+    
+    private BatchJob CreateStructJobs()
+    {
+        var htmlData = new BatchJob();
+
+        htmlData.TemplateName = comboTemplates.Text;
+        htmlData.listJobs = new List<Dictionary<string, JobFields>>();
+        foreach (DataGridViewRow rowOrder in dgvOrder.Rows)
+        {
+            var nrCol = 0;
+            var newJob = new Dictionary<string, JobFields>();
+            foreach (DataGridViewColumn column in dgvOrder.Columns)
+            {
+                var newDataField = new JobFields();
+                newDataField.Type = _listEntity[nrCol].ValueType.ToString();
+                newDataField.Name = column.Name;
+                newDataField.Value = rowOrder.Cells[column.Name].Value.ToString();
+                newJob.Add(nrCol.ToString(), newDataField);
+                nrCol++;
+            }
+            htmlData.listJobs.Add(newJob);
+        }
+        
+        return htmlData;
+    }
+
+    const string XML_ROOT_JOBS = "ListTemplates";
+    const string XML_JOB = "Job";
+    const string XML_JOB_NAME = "TemplateName";
+    const string XML_DOCUMENT = "Document";
+    const string XML_DOCUMENT_ID = "Id";
+    const string XML_DATAFIELD = "DataFiled";
+    const string XML_DATAFIELD_NAME = "Name";
+    const string XML_DATAFIELD_TYPE = "Type";
+    const string XML_DATAFIELD_VALUE = "Value";
+    
+    private bool CreateHeaderFile(string fileName)
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        XmlNode docNode = xmlDoc.CreateXmlDeclaration("1.0", "UTF-8", null);
+        xmlDoc.AppendChild(docNode);
+        XmlNode rootNode = xmlDoc.CreateElement(XML_ROOT_JOBS);
+        xmlDoc.AppendChild(rootNode);
+        try
+        {
+            xmlDoc.Save(fileName);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    private void SaveJobsInXmlFile(string fileName, BatchJob jobs)
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        
+        xmlDoc.Load(fileName);
+        XmlNode rootNode = xmlDoc.SelectSingleNode(XML_ROOT_JOBS);
+        
+        if (rootNode != null)
+        {
+            XmlNode nodeTemplate = xmlDoc.CreateElement(XML_JOB);
+            XmlAttribute nameAttribute = xmlDoc.CreateAttribute(XML_JOB_NAME);
+            nameAttribute.Value = jobs.TemplateName;
+            nodeTemplate.Attributes!.Append(nameAttribute);
+            rootNode.AppendChild(nodeTemplate);
+
+            var nrJob = 1;
+            foreach (var job in jobs.listJobs)
+            {
+                XmlNode jobNode = xmlDoc.CreateElement(XML_DOCUMENT);
+                XmlAttribute titleAttribute = xmlDoc.CreateAttribute(XML_DOCUMENT_ID);
+                titleAttribute.Value = nrJob.ToString();
+                jobNode.Attributes.Append(titleAttribute);
+                nrJob++;
+
+                foreach (var dataField in job)
+                {
+                    XmlNode fieldNode = xmlDoc.CreateElement(XML_DATAFIELD);
+                    XmlAttribute fieldAttribute = xmlDoc.CreateAttribute(XML_DATAFIELD_TYPE);
+                    fieldAttribute.Value = dataField.Value.Type;
+                    fieldNode.Attributes.Append(fieldAttribute);
+                    fieldAttribute = xmlDoc.CreateAttribute(XML_DATAFIELD_NAME);
+                    fieldAttribute.Value = dataField.Value.Name;
+                    fieldNode.Attributes.Append(fieldAttribute);
+                    fieldAttribute = xmlDoc.CreateAttribute(XML_DATAFIELD_VALUE);
+                    fieldAttribute.Value = dataField.Value.Value;
+                    fieldNode.Attributes.Append(fieldAttribute);
+                    jobNode.AppendChild(fieldNode);
+                }
+                nodeTemplate.AppendChild(jobNode);
+            }
+            rootNode.AppendChild(nodeTemplate);
+            
+            xmlDoc.Save(fileName);
+        }
+    }
+    
+    private void btExportOrder_Click(object sender, EventArgs e)
+    {
+        var strData = CreateStructJobs();
+            
+        var sfd = new SaveFileDialog();
+        sfd.Title = @"Export Orders";
+        sfd.Filter = @"Orders files (*.html)|*.html";
+        if (sfd.ShowDialog() == DialogResult.OK)
+        {
+            if (CreateHeaderFile(sfd.FileName))
+            {
+                SaveJobsInXmlFile(sfd.FileName, strData);
+            }
+            else
+                MessageBox.Show($@"Error to create = {sfd.FileName}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void btUp_Click(object sender, EventArgs e)
+    {
+        DataGridView dgv = dgvOrder;
+        try
+        {
+            int totalRows = dgv.Rows.Count;
+            // get index of the row for the selected cell
+            int rowIndex = dgv.SelectedCells[ 0 ].OwningRow.Index;
+            if ( rowIndex == 0 )
+                return;
+            // get index of the column for the selected cell
+            int colIndex = dgv.SelectedCells[ 0 ].OwningColumn.Index;
+            DataGridViewRow selectedRow = dgv.Rows[ rowIndex ];
+            dgv.Rows.Remove( selectedRow );
+            dgv.Rows.Insert( rowIndex - 1, selectedRow );
+            dgv.ClearSelection();
+            dgv.Rows[ rowIndex - 1 ].Cells[ colIndex ].Selected = true;
+        }
+        catch { }
+    }
+
+    private void btDown_Click(object sender, EventArgs e)
+    {
+        DataGridView dgv = dgvOrder;
+        try
+        {
+            int totalRows = dgv.Rows.Count;
+            // get index of the row for the selected cell
+            int rowIndex = dgv.SelectedCells[ 0 ].OwningRow.Index;
+            if ( rowIndex == totalRows - 1 )
+                return;
+            // get index of the column for the selected cell
+            int colIndex = dgv.SelectedCells[ 0 ].OwningColumn.Index;
+            DataGridViewRow selectedRow = dgv.Rows[ rowIndex ];
+            dgv.Rows.Remove( selectedRow );
+            dgv.Rows.Insert( rowIndex + 1, selectedRow );
+            dgv.ClearSelection();
+            dgv.Rows[ rowIndex + 1 ].Cells[ colIndex ].Selected = true; 
+        }
+        catch { }
     }
 }

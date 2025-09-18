@@ -64,6 +64,10 @@ partial class FormMain
         btClearOrder = new System.Windows.Forms.Button();
         btDeleteRowOrder = new System.Windows.Forms.Button();
         picLogo = new System.Windows.Forms.PictureBox();
+        btImportOrder = new System.Windows.Forms.Button();
+        btExportOrder = new System.Windows.Forms.Button();
+        btUp = new System.Windows.Forms.Button();
+        btDown = new System.Windows.Forms.Button();
         ((System.ComponentModel.ISupportInitialize)dgvEntity).BeginInit();
         panelString.SuspendLayout();
         panelImage.SuspendLayout();
@@ -75,9 +79,9 @@ partial class FormMain
         // btConnect
         // 
         btConnect.BackColor = System.Drawing.Color.LightCoral;
-        btConnect.Location = new System.Drawing.Point(525, 8);
+        btConnect.Location = new System.Drawing.Point(536, 1);
         btConnect.Name = "btConnect";
-        btConnect.Size = new System.Drawing.Size(95, 23);
+        btConnect.Size = new System.Drawing.Size(95, 35);
         btConnect.TabIndex = 0;
         btConnect.Text = "Connect";
         btConnect.UseVisualStyleBackColor = false;
@@ -86,7 +90,7 @@ partial class FormMain
         // tbIpAddress
         // 
         tbIpAddress.AcceptsReturn = true;
-        tbIpAddress.Location = new System.Drawing.Point(391, 8);
+        tbIpAddress.Location = new System.Drawing.Point(402, 8);
         tbIpAddress.Name = "tbIpAddress";
         tbIpAddress.Size = new System.Drawing.Size(114, 23);
         tbIpAddress.TabIndex = 1;
@@ -95,7 +99,7 @@ partial class FormMain
         // 
         // label1
         // 
-        label1.Location = new System.Drawing.Point(313, 8);
+        label1.Location = new System.Drawing.Point(324, 8);
         label1.Name = "label1";
         label1.Size = new System.Drawing.Size(76, 23);
         label1.TabIndex = 2;
@@ -104,7 +108,7 @@ partial class FormMain
         // 
         // label2
         // 
-        label2.Location = new System.Drawing.Point(331, 56);
+        label2.Location = new System.Drawing.Point(342, 56);
         label2.Name = "label2";
         label2.Size = new System.Drawing.Size(102, 23);
         label2.TabIndex = 3;
@@ -116,7 +120,7 @@ partial class FormMain
         comboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         comboTemplates.Enabled = false;
         comboTemplates.FormattingEnabled = true;
-        comboTemplates.Location = new System.Drawing.Point(429, 57);
+        comboTemplates.Location = new System.Drawing.Point(440, 57);
         comboTemplates.Name = "comboTemplates";
         comboTemplates.Size = new System.Drawing.Size(121, 23);
         comboTemplates.TabIndex = 4;
@@ -124,7 +128,7 @@ partial class FormMain
         // 
         // btStartWebHook
         // 
-        btStartWebHook.Location = new System.Drawing.Point(689, 50);
+        btStartWebHook.Location = new System.Drawing.Point(700, 50);
         btStartWebHook.Name = "btStartWebHook";
         btStartWebHook.Size = new System.Drawing.Size(95, 40);
         btStartWebHook.TabIndex = 5;
@@ -134,7 +138,7 @@ partial class FormMain
         // 
         // btResumeFeeder
         // 
-        btResumeFeeder.Location = new System.Drawing.Point(637, 123);
+        btResumeFeeder.Location = new System.Drawing.Point(648, 123);
         btResumeFeeder.Name = "btResumeFeeder";
         btResumeFeeder.Size = new System.Drawing.Size(147, 23);
         btResumeFeeder.TabIndex = 7;
@@ -145,7 +149,7 @@ partial class FormMain
         // tbInfoGhost
         // 
         tbInfoGhost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        tbInfoGhost.Location = new System.Drawing.Point(16, 123);
+        tbInfoGhost.Location = new System.Drawing.Point(27, 123);
         tbInfoGhost.Name = "tbInfoGhost";
         tbInfoGhost.ReadOnly = true;
         tbInfoGhost.Size = new System.Drawing.Size(604, 23);
@@ -155,7 +159,7 @@ partial class FormMain
         // btStartProcess
         // 
         btStartProcess.Enabled = false;
-        btStartProcess.Location = new System.Drawing.Point(16, 170);
+        btStartProcess.Location = new System.Drawing.Point(27, 170);
         btStartProcess.Name = "btStartProcess";
         btStartProcess.Size = new System.Drawing.Size(95, 40);
         btStartProcess.TabIndex = 10;
@@ -168,7 +172,7 @@ partial class FormMain
         cbNoLaser.Checked = true;
         cbNoLaser.CheckState = System.Windows.Forms.CheckState.Checked;
         cbNoLaser.Enabled = false;
-        cbNoLaser.Location = new System.Drawing.Point(122, 179);
+        cbNoLaser.Location = new System.Drawing.Point(133, 179);
         cbNoLaser.Name = "cbNoLaser";
         cbNoLaser.Size = new System.Drawing.Size(134, 24);
         cbNoLaser.TabIndex = 11;
@@ -178,7 +182,7 @@ partial class FormMain
         // btStopProcess
         // 
         btStopProcess.Enabled = false;
-        btStopProcess.Location = new System.Drawing.Point(16, 229);
+        btStopProcess.Location = new System.Drawing.Point(27, 229);
         btStopProcess.Name = "btStopProcess";
         btStopProcess.Size = new System.Drawing.Size(95, 40);
         btStopProcess.TabIndex = 12;
@@ -189,7 +193,7 @@ partial class FormMain
         // tbStatus
         // 
         tbStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        tbStatus.Location = new System.Drawing.Point(16, 89);
+        tbStatus.Location = new System.Drawing.Point(27, 89);
         tbStatus.Name = "tbStatus";
         tbStatus.ReadOnly = true;
         tbStatus.Size = new System.Drawing.Size(604, 23);
@@ -203,7 +207,8 @@ partial class FormMain
         dgvEntity.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
         dgvEntity.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Type, Name, UniqueEntityName, Value, ImageToPrint, PathImage });
         dgvEntity.Enabled = false;
-        dgvEntity.Location = new System.Drawing.Point(286, 179);
+        dgvEntity.Location = new System.Drawing.Point(297, 179);
+        dgvEntity.MultiSelect = false;
         dgvEntity.Name = "dgvEntity";
         dgvEntity.ReadOnly = true;
         dgvEntity.RowHeadersVisible = false;
@@ -269,7 +274,7 @@ partial class FormMain
         panelString.Controls.Add(btDefaultString);
         panelString.Controls.Add(tbStringToPrint);
         panelString.Controls.Add(label3);
-        panelString.Location = new System.Drawing.Point(16, 307);
+        panelString.Location = new System.Drawing.Point(27, 307);
         panelString.Name = "panelString";
         panelString.Size = new System.Drawing.Size(245, 172);
         panelString.TabIndex = 15;
@@ -277,7 +282,7 @@ partial class FormMain
         // 
         // btDefaultString
         // 
-        btDefaultString.Location = new System.Drawing.Point(167, 5);
+        btDefaultString.Location = new System.Drawing.Point(178, 5);
         btDefaultString.Name = "btDefaultString";
         btDefaultString.Size = new System.Drawing.Size(75, 38);
         btDefaultString.TabIndex = 18;
@@ -287,7 +292,7 @@ partial class FormMain
         // 
         // tbStringToPrint
         // 
-        tbStringToPrint.Location = new System.Drawing.Point(15, 75);
+        tbStringToPrint.Location = new System.Drawing.Point(26, 75);
         tbStringToPrint.Name = "tbStringToPrint";
         tbStringToPrint.Size = new System.Drawing.Size(221, 23);
         tbStringToPrint.TabIndex = 1;
@@ -295,7 +300,7 @@ partial class FormMain
         // 
         // label3
         // 
-        label3.Location = new System.Drawing.Point(15, 19);
+        label3.Location = new System.Drawing.Point(26, 19);
         label3.Name = "label3";
         label3.Size = new System.Drawing.Size(100, 24);
         label3.TabIndex = 0;
@@ -307,7 +312,7 @@ partial class FormMain
         panelImage.Controls.Add(btDefaultImage);
         panelImage.Controls.Add(picImageToPrint);
         panelImage.Controls.Add(label4);
-        panelImage.Location = new System.Drawing.Point(16, 307);
+        panelImage.Location = new System.Drawing.Point(27, 307);
         panelImage.Name = "panelImage";
         panelImage.Size = new System.Drawing.Size(245, 172);
         panelImage.TabIndex = 2;
@@ -315,7 +320,7 @@ partial class FormMain
         // 
         // btDefaultImage
         // 
-        btDefaultImage.Location = new System.Drawing.Point(167, 5);
+        btDefaultImage.Location = new System.Drawing.Point(178, 5);
         btDefaultImage.Name = "btDefaultImage";
         btDefaultImage.Size = new System.Drawing.Size(75, 38);
         btDefaultImage.TabIndex = 17;
@@ -327,7 +332,7 @@ partial class FormMain
         // 
         picImageToPrint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         picImageToPrint.Image = ((System.Drawing.Image)resources.GetObject("picImageToPrint.Image"));
-        picImageToPrint.Location = new System.Drawing.Point(54, 56);
+        picImageToPrint.Location = new System.Drawing.Point(65, 56);
         picImageToPrint.Name = "picImageToPrint";
         picImageToPrint.Size = new System.Drawing.Size(143, 104);
         picImageToPrint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -337,7 +342,7 @@ partial class FormMain
         // 
         // label4
         // 
-        label4.Location = new System.Drawing.Point(15, 19);
+        label4.Location = new System.Drawing.Point(26, 19);
         label4.Name = "label4";
         label4.Size = new System.Drawing.Size(100, 24);
         label4.TabIndex = 0;
@@ -346,7 +351,7 @@ partial class FormMain
         // btProcessCard
         // 
         btProcessCard.Enabled = false;
-        btProcessCard.Location = new System.Drawing.Point(156, 229);
+        btProcessCard.Location = new System.Drawing.Point(167, 229);
         btProcessCard.Name = "btProcessCard";
         btProcessCard.Size = new System.Drawing.Size(95, 40);
         btProcessCard.TabIndex = 16;
@@ -360,7 +365,8 @@ partial class FormMain
         dgvOrder.AllowUserToResizeRows = false;
         dgvOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         dgvOrder.Enabled = false;
-        dgvOrder.Location = new System.Drawing.Point(16, 552);
+        dgvOrder.Location = new System.Drawing.Point(27, 552);
+        dgvOrder.MultiSelect = false;
         dgvOrder.Name = "dgvOrder";
         dgvOrder.ReadOnly = true;
         dgvOrder.RowHeadersWidth = 24;
@@ -372,40 +378,40 @@ partial class FormMain
         // btAddToOrder
         // 
         btAddToOrder.Enabled = false;
-        btAddToOrder.Location = new System.Drawing.Point(298, 496);
+        btAddToOrder.Location = new System.Drawing.Point(420, 496);
         btAddToOrder.Name = "btAddToOrder";
         btAddToOrder.Size = new System.Drawing.Size(95, 40);
         btAddToOrder.TabIndex = 18;
-        btAddToOrder.Text = "Add to Order";
+        btAddToOrder.Text = "Add to Orders Table";
         btAddToOrder.UseVisualStyleBackColor = true;
         btAddToOrder.Click += btAddToOrder_Click;
         // 
         // btProcessOrder
         // 
         btProcessOrder.Enabled = false;
-        btProcessOrder.Location = new System.Drawing.Point(512, 496);
+        btProcessOrder.Location = new System.Drawing.Point(27, 496);
         btProcessOrder.Name = "btProcessOrder";
         btProcessOrder.Size = new System.Drawing.Size(95, 40);
         btProcessOrder.TabIndex = 19;
-        btProcessOrder.Text = "Process Order";
+        btProcessOrder.Text = "Process Orders";
         btProcessOrder.UseVisualStyleBackColor = true;
         btProcessOrder.Click += btProcessOrder_Click;
         // 
         // btClearOrder
         // 
         btClearOrder.Enabled = false;
-        btClearOrder.Location = new System.Drawing.Point(689, 496);
+        btClearOrder.Location = new System.Drawing.Point(158, 496);
         btClearOrder.Name = "btClearOrder";
         btClearOrder.Size = new System.Drawing.Size(95, 40);
         btClearOrder.TabIndex = 20;
-        btClearOrder.Text = "Clear Order";
+        btClearOrder.Text = "Clear Orders Table";
         btClearOrder.UseVisualStyleBackColor = true;
         btClearOrder.Click += btClearOrder_Click;
         // 
         // btDeleteRowOrder
         // 
         btDeleteRowOrder.Enabled = false;
-        btDeleteRowOrder.Location = new System.Drawing.Point(16, 496);
+        btDeleteRowOrder.Location = new System.Drawing.Point(289, 496);
         btDeleteRowOrder.Name = "btDeleteRowOrder";
         btDeleteRowOrder.Size = new System.Drawing.Size(95, 40);
         btDeleteRowOrder.TabIndex = 21;
@@ -416,18 +422,64 @@ partial class FormMain
         // picLogo
         // 
         picLogo.Image = ((System.Drawing.Image)resources.GetObject("picLogo.Image"));
-        picLogo.Location = new System.Drawing.Point(16, 8);
+        picLogo.Location = new System.Drawing.Point(27, 8);
         picLogo.Name = "picLogo";
         picLogo.Size = new System.Drawing.Size(138, 71);
         picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
         picLogo.TabIndex = 22;
         picLogo.TabStop = false;
         // 
+        // btImportOrder
+        // 
+        btImportOrder.Enabled = false;
+        btImportOrder.Location = new System.Drawing.Point(593, 496);
+        btImportOrder.Name = "btImportOrder";
+        btImportOrder.Size = new System.Drawing.Size(95, 40);
+        btImportOrder.TabIndex = 24;
+        btImportOrder.Text = "Import Orders List";
+        btImportOrder.UseVisualStyleBackColor = true;
+        btImportOrder.Click += btImportOrder_Click;
+        // 
+        // btExportOrder
+        // 
+        btExportOrder.Enabled = false;
+        btExportOrder.Location = new System.Drawing.Point(700, 496);
+        btExportOrder.Name = "btExportOrder";
+        btExportOrder.Size = new System.Drawing.Size(95, 40);
+        btExportOrder.TabIndex = 23;
+        btExportOrder.Text = "Export Orders List";
+        btExportOrder.UseVisualStyleBackColor = true;
+        btExportOrder.Click += btExportOrder_Click;
+        // 
+        // btUp
+        // 
+        btUp.Image = ((System.Drawing.Image)resources.GetObject("btUp.Image"));
+        btUp.Location = new System.Drawing.Point(1, 625);
+        btUp.Name = "btUp";
+        btUp.Size = new System.Drawing.Size(24, 23);
+        btUp.TabIndex = 25;
+        btUp.UseVisualStyleBackColor = true;
+        btUp.Click += btUp_Click;
+        // 
+        // btDown
+        // 
+        btDown.Image = ((System.Drawing.Image)resources.GetObject("btDown.Image"));
+        btDown.Location = new System.Drawing.Point(1, 697);
+        btDown.Name = "btDown";
+        btDown.Size = new System.Drawing.Size(24, 23);
+        btDown.TabIndex = 26;
+        btDown.UseVisualStyleBackColor = true;
+        btDown.Click += btDown_Click;
+        // 
         // FormMain
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(802, 806);
+        ClientSize = new System.Drawing.Size(823, 806);
+        Controls.Add(btDown);
+        Controls.Add(btUp);
+        Controls.Add(btImportOrder);
+        Controls.Add(btExportOrder);
         Controls.Add(picLogo);
         Controls.Add(btDeleteRowOrder);
         Controls.Add(btClearOrder);
@@ -515,4 +567,8 @@ partial class FormMain
     private System.Windows.Forms.Button btDefaultImage;
     private System.Windows.Forms.Button btDefaultString;
     private System.Windows.Forms.Button btDeleteRowOrder;
+    private System.Windows.Forms.Button btImportOrder;
+    private System.Windows.Forms.Button btExportOrder;
+    private System.Windows.Forms.Button btUp;
+    private System.Windows.Forms.Button btDown;
 }
