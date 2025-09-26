@@ -6,8 +6,9 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>WinFormsApp1</RootNamespace>
         <ApplicationIcon>Ixla-icon.ico</ApplicationIcon>
+        <AssemblyVersion>1.0.1</AssemblyVersion>
+        <FileVersion>1.0.1</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

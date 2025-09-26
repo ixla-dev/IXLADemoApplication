@@ -68,6 +68,7 @@ partial class FormMain
         btExportOrder = new System.Windows.Forms.Button();
         btUp = new System.Windows.Forms.Button();
         btDown = new System.Windows.Forms.Button();
+        cbCreateBadgeTrack = new System.Windows.Forms.CheckBox();
         ((System.ComponentModel.ISupportInitialize)dgvEntity).BeginInit();
         panelString.SuspendLayout();
         panelImage.SuspendLayout();
@@ -172,7 +173,7 @@ partial class FormMain
         cbNoLaser.Checked = true;
         cbNoLaser.CheckState = System.Windows.Forms.CheckState.Checked;
         cbNoLaser.Enabled = false;
-        cbNoLaser.Location = new System.Drawing.Point(133, 179);
+        cbNoLaser.Location = new System.Drawing.Point(141, 179);
         cbNoLaser.Name = "cbNoLaser";
         cbNoLaser.Size = new System.Drawing.Size(134, 24);
         cbNoLaser.TabIndex = 11;
@@ -182,7 +183,7 @@ partial class FormMain
         // btStopProcess
         // 
         btStopProcess.Enabled = false;
-        btStopProcess.Location = new System.Drawing.Point(27, 229);
+        btStopProcess.Location = new System.Drawing.Point(27, 220);
         btStopProcess.Name = "btStopProcess";
         btStopProcess.Size = new System.Drawing.Size(95, 40);
         btStopProcess.TabIndex = 12;
@@ -207,12 +208,12 @@ partial class FormMain
         dgvEntity.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
         dgvEntity.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Type, Name, UniqueEntityName, Value, ImageToPrint, PathImage });
         dgvEntity.Enabled = false;
-        dgvEntity.Location = new System.Drawing.Point(297, 179);
+        dgvEntity.Location = new System.Drawing.Point(297, 170);
         dgvEntity.MultiSelect = false;
         dgvEntity.Name = "dgvEntity";
         dgvEntity.ReadOnly = true;
         dgvEntity.RowHeadersVisible = false;
-        dgvEntity.Size = new System.Drawing.Size(498, 300);
+        dgvEntity.Size = new System.Drawing.Size(498, 309);
         dgvEntity.TabIndex = 14;
         dgvEntity.CellClick += dgvEntity_CellClick;
         // 
@@ -282,7 +283,7 @@ partial class FormMain
         // 
         // btDefaultString
         // 
-        btDefaultString.Location = new System.Drawing.Point(178, 5);
+        btDefaultString.Location = new System.Drawing.Point(165, 5);
         btDefaultString.Name = "btDefaultString";
         btDefaultString.Size = new System.Drawing.Size(75, 38);
         btDefaultString.TabIndex = 18;
@@ -292,7 +293,7 @@ partial class FormMain
         // 
         // tbStringToPrint
         // 
-        tbStringToPrint.Location = new System.Drawing.Point(26, 75);
+        tbStringToPrint.Location = new System.Drawing.Point(12, 75);
         tbStringToPrint.Name = "tbStringToPrint";
         tbStringToPrint.Size = new System.Drawing.Size(221, 23);
         tbStringToPrint.TabIndex = 1;
@@ -320,7 +321,7 @@ partial class FormMain
         // 
         // btDefaultImage
         // 
-        btDefaultImage.Location = new System.Drawing.Point(178, 5);
+        btDefaultImage.Location = new System.Drawing.Point(164, 5);
         btDefaultImage.Name = "btDefaultImage";
         btDefaultImage.Size = new System.Drawing.Size(75, 38);
         btDefaultImage.TabIndex = 17;
@@ -332,7 +333,7 @@ partial class FormMain
         // 
         picImageToPrint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         picImageToPrint.Image = ((System.Drawing.Image)resources.GetObject("picImageToPrint.Image"));
-        picImageToPrint.Location = new System.Drawing.Point(65, 56);
+        picImageToPrint.Location = new System.Drawing.Point(54, 56);
         picImageToPrint.Name = "picImageToPrint";
         picImageToPrint.Size = new System.Drawing.Size(143, 104);
         picImageToPrint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -351,7 +352,7 @@ partial class FormMain
         // btProcessCard
         // 
         btProcessCard.Enabled = false;
-        btProcessCard.Location = new System.Drawing.Point(167, 229);
+        btProcessCard.Location = new System.Drawing.Point(167, 220);
         btProcessCard.Name = "btProcessCard";
         btProcessCard.Size = new System.Drawing.Size(95, 40);
         btProcessCard.TabIndex = 16;
@@ -471,11 +472,23 @@ partial class FormMain
         btDown.UseVisualStyleBackColor = true;
         btDown.Click += btDown_Click;
         // 
+        // cbCreateBadgeTrack
+        // 
+        cbCreateBadgeTrack.Checked = true;
+        cbCreateBadgeTrack.CheckState = System.Windows.Forms.CheckState.Checked;
+        cbCreateBadgeTrack.Location = new System.Drawing.Point(31, 269);
+        cbCreateBadgeTrack.Name = "cbCreateBadgeTrack";
+        cbCreateBadgeTrack.Size = new System.Drawing.Size(186, 24);
+        cbCreateBadgeTrack.TabIndex = 27;
+        cbCreateBadgeTrack.Text = "Create Random Badge Tracks";
+        cbCreateBadgeTrack.UseVisualStyleBackColor = true;
+        // 
         // FormMain
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(823, 806);
+        Controls.Add(cbCreateBadgeTrack);
         Controls.Add(btDown);
         Controls.Add(btUp);
         Controls.Add(btImportOrder);
@@ -500,8 +513,8 @@ partial class FormMain
         Controls.Add(label1);
         Controls.Add(tbIpAddress);
         Controls.Add(btConnect);
-        Controls.Add(panelString);
         Controls.Add(panelImage);
+        Controls.Add(panelString);
         Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "IXLA Demo Application";
@@ -571,4 +584,5 @@ partial class FormMain
     private System.Windows.Forms.Button btExportOrder;
     private System.Windows.Forms.Button btUp;
     private System.Windows.Forms.Button btDown;
+    private System.Windows.Forms.CheckBox cbCreateBadgeTrack;
 }

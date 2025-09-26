@@ -58,6 +58,14 @@ public partial class FormMain : Form
     private const string TRACK2_DEFAULT_STRING = "1234567890";
     private const string TRACK3_DEFAULT_STRING = "1234567890123467890";
 
+    private const int MAX_CHAR_TRACK_1 = 76;
+    private const int MAX_CHAR_TRACK_2 = 37;
+    private const int MAX_CHAR_TRACK_3 = 102;
+    // allowed_list=[32,36,40,41]+list(range(45,58))+list(range(65,91))
+    private const string TRACK1_VALID_CHAR = " $()-./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //u8.ToArray();
+    // allowed_list=list(range(48,58))
+    private const string TRACK23_VALID_CHAR = "<=>0123456789:;"; //u8.ToArray();
+
     private const string TYPE_FIELD_STRING = "String";
     
     private SearchJobTemplatesResultDto _templates;
@@ -85,6 +93,8 @@ public partial class FormMain : Form
 
     private void FormMain_Load(object sender, EventArgs e)
     {
+        this.Text += (@"  -  " + Assembly.GetExecutingAssembly().GetName().Version);
+        
         if (_defautlImage == null)
             _defautlImage = picImageToPrint.Image;
     }
@@ -385,7 +395,7 @@ public partial class FormMain : Form
             _listEntity = api.GetEntityDescriptorsByJobTemplateId(id);// Async(id).ConfigureAwait(false);
             foreach (var entity in _listEntity)
             {
-                if (entity.ValueType == EntityFieldValueType.String)
+                if (entity.ValueType == EntityFieldValueType.String || entity.ValueType == EntityFieldValueType.TrackString)
                 {
                     dgvEntity.Rows.Add(entity.ValueType, entity.DisplayName, entity.EntityName, entity.DisplayName);
                     dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = entity.DisplayName;
@@ -417,7 +427,7 @@ public partial class FormMain : Form
                 {
                     magneticFakeEntity = new()
                     {
-                        ValueType = EntityFieldValueType.String,
+                        ValueType = EntityFieldValueType.TrackString,
                         EntityName = TRACK1_DB_WRITE_FIELD_NAME,
                         DisplayName = TRACK1_DEFAULT_STRING,
                     };
@@ -440,7 +450,7 @@ public partial class FormMain : Form
                 {
                     magneticFakeEntity = new()
                     {
-                        ValueType = EntityFieldValueType.String,
+                        ValueType = EntityFieldValueType.TrackString,
                         EntityName = TRACK2_DB_WRITE_FIELD_NAME,
                         DisplayName = TRACK2_DEFAULT_STRING,
                     };
@@ -463,7 +473,7 @@ public partial class FormMain : Form
                 {
                     magneticFakeEntity = new()
                     {
-                        ValueType = EntityFieldValueType.String,
+                        ValueType = EntityFieldValueType.TrackString,
                         EntityName = TRACK3_DB_WRITE_FIELD_NAME,
                         DisplayName = TRACK3_DEFAULT_STRING,
                     };
@@ -650,7 +660,7 @@ public partial class FormMain : Form
         {
             foreach (var entity in _listEntity)
             {
-                if (entity.ValueType == EntityFieldValueType.String)
+                if (entity.ValueType == EntityFieldValueType.String || entity.ValueType == EntityFieldValueType.TrackString)
                 {
                     dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].Value = column.Value;
                     dgvEntity.Rows[iiRow].Cells[(int)DgvColumns.StringToPrint].ToolTipText = column.Value.ToString();
@@ -768,7 +778,8 @@ public partial class FormMain : Form
    
                 for(int iiEntity = 0; iiEntity < _listEntity.Count; iiEntity++) 
                 {
-                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String)
+                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String ||
+                        _listEntity[iiEntity].ValueType == EntityFieldValueType.TrackString)
                     {
                         string fieldName = dgvOrder.Columns[iiEntity].Name;
                         _deviceDb.AddParameter(fieldName);
@@ -794,7 +805,8 @@ public partial class FormMain : Form
                 
                 for(int iiEntity = 0; iiEntity < _listEntity.Count; iiEntity++) 
                 {
-                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String)
+                    if (_listEntity[iiEntity].ValueType == EntityFieldValueType.String ||
+                        _listEntity[iiEntity].ValueType == EntityFieldValueType.TrackString)
                     {
                         _deviceDb.SetParameterString(dgvOrder.Columns[iiEntity].Name, rowOrder.Cells[iiEntity].Value.ToString());
                     }
@@ -824,10 +836,27 @@ public partial class FormMain : Form
         int iiCol = 0;
         int newRow = dgvOrder.Rows.Add();
 
+        var wTrack1 = RandomString(1, MAX_CHAR_TRACK_1);
+        var wTrack2 = RandomString(2, MAX_CHAR_TRACK_2);
+        var wTrack3 = RandomString(3, MAX_CHAR_TRACK_3);
+        
         foreach (DataGridViewRow row in dgvEntity.Rows)
         {
             if (row.Cells[(int)DgvColumns.StringToPrint].Value != null)
-                dgvOrder.Rows[newRow].Cells[iiCol].Value = row.Cells[(int)DgvColumns.StringToPrint].Value.ToString();
+            {
+                if (_listEntity[iiCol].ValueType == EntityFieldValueType.TrackString && cbCreateBadgeTrack.Checked)
+                {
+                    if(_listEntity[iiCol].EntityName == TRACK1_DB_WRITE_FIELD_NAME)
+                        dgvOrder.Rows[newRow].Cells[iiCol].Value = wTrack1;
+                    if(_listEntity[iiCol].EntityName == TRACK2_DB_WRITE_FIELD_NAME)
+                        dgvOrder.Rows[newRow].Cells[iiCol].Value = wTrack2;
+                    if(_listEntity[iiCol].EntityName == TRACK3_DB_WRITE_FIELD_NAME)
+                        dgvOrder.Rows[newRow].Cells[iiCol].Value = wTrack3;
+                }
+                else
+                    dgvOrder.Rows[newRow].Cells[iiCol].Value = row.Cells[(int)DgvColumns.StringToPrint].Value.ToString();
+            }
+
             if (_listEntity[iiCol].ValueType == EntityFieldValueType.Image || _listEntity[iiCol].ValueType == EntityFieldValueType.InkjetImage)
             {
                 if (row.Cells[(int)DgvColumns.PathImage].Value == null)
@@ -1160,5 +1189,20 @@ public partial class FormMain : Form
             dgv.Rows[ rowIndex + 1 ].Cells[ colIndex ].Selected = true; 
         }
         catch { }
+    }
+    
+    private Random _random = new Random();
+
+    private string RandomString(int nrTrack, int lenTrack)
+    {
+        string chars;
+
+        if (nrTrack == 1)
+            chars = TRACK1_VALID_CHAR;
+        else
+            chars = TRACK23_VALID_CHAR;
+
+        return new string(Enumerable.Repeat(chars, lenTrack)
+            .Select(s => s[_random.Next(s.Length)]).ToArray());
     }
 }

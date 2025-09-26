@@ -54,8 +54,13 @@ namespace Aida.Sdk.Mini.Model
         /// Enum InkjetImage for value: InkjetImage
         /// </summary>
         [EnumMember(Value = "InkjetImage")]
-        InkjetImage = 4
-
+        InkjetImage = 4,
+        
+        /// <summary>
+        /// Enum String for value: String
+        /// </summary>
+        /// [EnumMember(Value = "String")]
+        TrackString = 5,
     }
 
 }
