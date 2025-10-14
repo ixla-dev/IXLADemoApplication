@@ -69,12 +69,15 @@ partial class FormMain
         btUp = new System.Windows.Forms.Button();
         btDown = new System.Windows.Forms.Button();
         cbCreateBadgeTrack = new System.Windows.Forms.CheckBox();
+        gbWebhook = new System.Windows.Forms.GroupBox();
+        lbWebhookIp = new System.Windows.Forms.Label();
         ((System.ComponentModel.ISupportInitialize)dgvEntity).BeginInit();
         panelString.SuspendLayout();
         panelImage.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)picImageToPrint).BeginInit();
         ((System.ComponentModel.ISupportInitialize)dgvOrder).BeginInit();
         ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
+        gbWebhook.SuspendLayout();
         SuspendLayout();
         // 
         // btConnect
@@ -129,7 +132,7 @@ partial class FormMain
         // 
         // btStartWebHook
         // 
-        btStartWebHook.Location = new System.Drawing.Point(700, 50);
+        btStartWebHook.Location = new System.Drawing.Point(16, 22);
         btStartWebHook.Name = "btStartWebHook";
         btStartWebHook.Size = new System.Drawing.Size(95, 40);
         btStartWebHook.TabIndex = 5;
@@ -483,11 +486,32 @@ partial class FormMain
         cbCreateBadgeTrack.Text = "Create Random Badge Tracks";
         cbCreateBadgeTrack.UseVisualStyleBackColor = true;
         // 
+        // gbWebhook
+        // 
+        gbWebhook.Controls.Add(lbWebhookIp);
+        gbWebhook.Controls.Add(btStartWebHook);
+        gbWebhook.Location = new System.Drawing.Point(667, 8);
+        gbWebhook.Name = "gbWebhook";
+        gbWebhook.Size = new System.Drawing.Size(128, 104);
+        gbWebhook.TabIndex = 28;
+        gbWebhook.TabStop = false;
+        gbWebhook.Text = "Webhook";
+        // 
+        // lbWebhookIp
+        // 
+        lbWebhookIp.Location = new System.Drawing.Point(0, 74);
+        lbWebhookIp.Name = "lbWebhookIp";
+        lbWebhookIp.Size = new System.Drawing.Size(128, 20);
+        lbWebhookIp.TabIndex = 6;
+        lbWebhookIp.Text = "0.0.0.0";
+        lbWebhookIp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        // 
         // FormMain
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(823, 806);
+        Controls.Add(gbWebhook);
         Controls.Add(cbCreateBadgeTrack);
         Controls.Add(btDown);
         Controls.Add(btUp);
@@ -507,7 +531,6 @@ partial class FormMain
         Controls.Add(btStartProcess);
         Controls.Add(tbInfoGhost);
         Controls.Add(btResumeFeeder);
-        Controls.Add(btStartWebHook);
         Controls.Add(comboTemplates);
         Controls.Add(label2);
         Controls.Add(label1);
@@ -526,6 +549,7 @@ partial class FormMain
         ((System.ComponentModel.ISupportInitialize)picImageToPrint).EndInit();
         ((System.ComponentModel.ISupportInitialize)dgvOrder).EndInit();
         ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
+        gbWebhook.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();
     }
@@ -585,4 +609,6 @@ partial class FormMain
     private System.Windows.Forms.Button btUp;
     private System.Windows.Forms.Button btDown;
     private System.Windows.Forms.CheckBox cbCreateBadgeTrack;
+    private GroupBox gbWebhook;
+    private System.Windows.Forms.Label lbWebhookIp;
 }

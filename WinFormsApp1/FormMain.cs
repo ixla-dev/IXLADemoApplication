@@ -97,7 +97,7 @@ public partial class FormMain : Form
     {
         this.Text += (@"  -  " + Assembly.GetExecutingAssembly().GetName().Version);
         
-        var myIp = GetLocalIPAddress();
+        lbWebhookIp.Text = $@"IP PC: {GetLocalIPAddress()}";
         
         if (_defautlImage == null)
             _defautlImage = picImageToPrint.Image;
