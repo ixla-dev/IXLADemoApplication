@@ -99,7 +99,7 @@ public class ClientWebHost
 
     public async void StartWebHook()
     {
-        string hostIpAddress = "192.168.3.216";
+        string hostIpAddress = FormMain.GetLocalIPAddress();// "192.168.3.216";
         var host = CreateHost(hostIpAddress, 4);
         await host.RunConsoleAsync();
     }

@@ -8,6 +8,8 @@ using Aida.Sdk.Mini.Model;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using System.Data;
+using System.Net;
+using System.Net.Sockets;
 using System.Xml;
 
 #nullable disable
@@ -95,6 +97,8 @@ public partial class FormMain : Form
     {
         this.Text += (@"  -  " + Assembly.GetExecutingAssembly().GetName().Version);
         
+        var myIp = GetLocalIPAddress();
+        
         if (_defautlImage == null)
             _defautlImage = picImageToPrint.Image;
     }
@@ -104,6 +108,21 @@ public partial class FormMain : Form
         SaveConfiguration();
     }
 
+    public static string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                var ipSplit = ip.ToString().Split('.');
+                if (ipSplit[0] == "192" && ipSplit[1] == "168" && ipSplit[2] == "3")
+                    return ip.ToString();
+            }
+        }
+        throw new Exception("No network adapters with an IXLA IPv4 address in the system!");
+    }
+    
     const string XML_CONFIG_FILE = "DemoApplication.xml";
     const string XML_ROOT = "IXLATool";
     const string XML_IP_ADDRESS = "IpAddress";
@@ -336,7 +355,8 @@ public partial class FormMain : Form
         _webHost = new ClientWebHost();
         try
         {
-            var wb = _webHost.CreateHost("192.168.3.216", 4);
+            var localIpAddress = FormMain.GetLocalIPAddress();
+            var wb = _webHost.CreateHost(localIpAddress, 4);
             _webHost.StartWebHook();
 
             btStartWebHook.BackColor = Color.LightGreen;
