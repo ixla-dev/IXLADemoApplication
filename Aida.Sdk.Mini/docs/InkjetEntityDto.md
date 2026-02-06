@@ -7,8 +7,8 @@ Name | Type | Description | Notes
 **Id** | **int** |  | [optional] 
 **Name** | **string** |  | [optional] 
 **DisplayName** | **string** |  | [optional] 
-**X** | **float** |  | [optional] 
-**Y** | **float** |  | [optional] 
+**X** | **int** |  | [optional] 
+**Y** | **int** |  | [optional] 
 **Width** | **int** |  | [optional] 
 **Height** | **int** |  | [optional] 
 
