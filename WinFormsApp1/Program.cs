@@ -1,3 +1,5 @@
+using DemoApplication;
+
 namespace WinFormsApp1;
 
 static class Program

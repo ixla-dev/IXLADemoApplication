@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp1;
+﻿namespace DemoApplication;
 
 partial class FormMain
 {
@@ -71,6 +71,7 @@ partial class FormMain
         cbCreateBadgeTrack = new System.Windows.Forms.CheckBox();
         gbWebhook = new System.Windows.Forms.GroupBox();
         lbWebhookIp = new System.Windows.Forms.Label();
+        CancelJob = new System.Windows.Forms.Button();
         ((System.ComponentModel.ISupportInitialize)dgvEntity).BeginInit();
         panelString.SuspendLayout();
         panelImage.SuspendLayout();
@@ -96,7 +97,7 @@ partial class FormMain
         tbIpAddress.AcceptsReturn = true;
         tbIpAddress.Location = new System.Drawing.Point(402, 8);
         tbIpAddress.Name = "tbIpAddress";
-        tbIpAddress.Size = new System.Drawing.Size(114, 23);
+        tbIpAddress.Size = new System.Drawing.Size(114, 27);
         tbIpAddress.TabIndex = 1;
         tbIpAddress.Text = "0.0.0.0";
         tbIpAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -126,7 +127,7 @@ partial class FormMain
         comboTemplates.FormattingEnabled = true;
         comboTemplates.Location = new System.Drawing.Point(440, 57);
         comboTemplates.Name = "comboTemplates";
-        comboTemplates.Size = new System.Drawing.Size(121, 23);
+        comboTemplates.Size = new System.Drawing.Size(121, 28);
         comboTemplates.TabIndex = 4;
         comboTemplates.SelectedIndexChanged += comboTemplates_SelectedIndexChanged;
         // 
@@ -156,7 +157,7 @@ partial class FormMain
         tbInfoGhost.Location = new System.Drawing.Point(27, 123);
         tbInfoGhost.Name = "tbInfoGhost";
         tbInfoGhost.ReadOnly = true;
-        tbInfoGhost.Size = new System.Drawing.Size(604, 23);
+        tbInfoGhost.Size = new System.Drawing.Size(604, 27);
         tbInfoGhost.TabIndex = 9;
         tbInfoGhost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
         // 
@@ -200,7 +201,7 @@ partial class FormMain
         tbStatus.Location = new System.Drawing.Point(27, 89);
         tbStatus.Name = "tbStatus";
         tbStatus.ReadOnly = true;
-        tbStatus.Size = new System.Drawing.Size(604, 23);
+        tbStatus.Size = new System.Drawing.Size(604, 27);
         tbStatus.TabIndex = 13;
         tbStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
         // 
@@ -298,7 +299,7 @@ partial class FormMain
         // 
         tbStringToPrint.Location = new System.Drawing.Point(12, 75);
         tbStringToPrint.Name = "tbStringToPrint";
-        tbStringToPrint.Size = new System.Drawing.Size(221, 23);
+        tbStringToPrint.Size = new System.Drawing.Size(221, 27);
         tbStringToPrint.TabIndex = 1;
         tbStringToPrint.TextChanged += tbStringToPrint_TextChanged;
         // 
@@ -506,11 +507,22 @@ partial class FormMain
         lbWebhookIp.Text = "0.0.0.0";
         lbWebhookIp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
         // 
+        // CancelJob
+        // 
+        CancelJob.Location = new System.Drawing.Point(237, 12);
+        CancelJob.Name = "CancelJob";
+        CancelJob.Size = new System.Drawing.Size(78, 54);
+        CancelJob.TabIndex = 29;
+        CancelJob.Text = "Cancel Job";
+        CancelJob.UseVisualStyleBackColor = true;
+        CancelJob.Click += CancelJob_Click;
+        // 
         // FormMain
         // 
-        AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+        AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(823, 806);
+        Controls.Add(CancelJob);
         Controls.Add(gbWebhook);
         Controls.Add(cbCreateBadgeTrack);
         Controls.Add(btDown);
@@ -539,6 +551,7 @@ partial class FormMain
         Controls.Add(panelImage);
         Controls.Add(panelString);
         Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
+        Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
         StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         Text = "IXLA Demo Application";
         Load += FormMain_Load;
@@ -553,6 +566,8 @@ partial class FormMain
         ResumeLayout(false);
         PerformLayout();
     }
+
+    private System.Windows.Forms.Button CancelJob;
 
     private System.Windows.Forms.PictureBox picLogo;
 

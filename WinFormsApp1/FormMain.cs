@@ -1,20 +1,18 @@
-using System.Resources;
+#nullable disable
+
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using Aida.Sdk.Mini;
+using System.Text.Json;
+using System.Xml;
 using Aida.Sdk.Mini.Api;
 using Aida.Sdk.Mini.Client;
 using Aida.Sdk.Mini.Model;
-using Microsoft.Extensions.Hosting;
-using Npgsql;
-using System.Data;
-using System.Net;
-using System.Net.Sockets;
-using System.Xml;
+using WinFormsApp1;
 
-#nullable disable
-
-namespace WinFormsApp1;
+namespace DemoApplication;
 public partial class FormMain : Form
 {
     enum DgvColumns : int
@@ -31,7 +29,7 @@ public partial class FormMain : Form
     private struct BatchJob
     {
         public string TemplateName;
-        public List<Dictionary<string, JobFields>> listJobs;
+        public List<Dictionary<string, JobFields>> ListJobs;
     }
 
     private struct JobFields
@@ -75,7 +73,9 @@ public partial class FormMain : Form
     private DeviceDB _deviceDb;
     private Image _defautlImage;
 
-    private int dgvOrderOriginalSize;
+    private readonly int _dgvOrderOriginalSize;
+
+    private string _saveCorrelationId;
 
 #nullable disable
 
@@ -83,7 +83,7 @@ public partial class FormMain : Form
     {
         InitializeComponent();
 
-        dgvOrderOriginalSize = dgvOrder.Width;
+        _dgvOrderOriginalSize = dgvOrder.Width;
         
         _templates = new SearchJobTemplatesResultDto();
         _defautlImage = null;
@@ -99,8 +99,7 @@ public partial class FormMain : Form
         
         lbWebhookIp.Text = $@"IP PC: {GetLocalIPAddress()}";
         
-        if (_defautlImage == null)
-            _defautlImage = picImageToPrint.Image;
+        _defautlImage ??= picImageToPrint.Image;
     }
 
     private void OnFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -408,7 +407,7 @@ public partial class FormMain : Form
             EnableEntityControls(false);
             dgvEntity.Rows.Clear();
             dgvOrder.Columns.Clear();
-            dgvOrder.Width = dgvOrderOriginalSize;
+            dgvOrder.Width = _dgvOrderOriginalSize;
             _lastRow = -1;
 
             // Check Template Entity
@@ -769,6 +768,7 @@ public partial class FormMain : Form
 
             _correlationId++;
             var correlationId = $"job:{_correlationId:0000}";
+            _saveCorrelationId = correlationId;
             // Set correlation_id and job_status parameter
             _deviceDb.SetParameterString("correlation_Id", correlationId);
             _deviceDb.SetParameterString("job_status", "Waiting");
@@ -780,11 +780,9 @@ public partial class FormMain : Form
 
     private void btProcessOrder_Click(object sender, EventArgs e)
     {
-        int idxCombo;
-
         EnableEntityControls(false);
 
-        idxCombo = comboTemplates.SelectedIndex;
+        var idxCombo = comboTemplates.SelectedIndex;
 
         var api = new IntegrationApi(GetUrl());
         {
@@ -1054,24 +1052,28 @@ public partial class FormMain : Form
     
     private BatchJob CreateStructJobs()
     {
-        var htmlData = new BatchJob();
+        var htmlData = new BatchJob
+        {
+            TemplateName = comboTemplates.Text,
+            ListJobs = []
+        };
 
-        htmlData.TemplateName = comboTemplates.Text;
-        htmlData.listJobs = new List<Dictionary<string, JobFields>>();
         foreach (DataGridViewRow rowOrder in dgvOrder.Rows)
         {
             var nrCol = 0;
             var newJob = new Dictionary<string, JobFields>();
             foreach (DataGridViewColumn column in dgvOrder.Columns)
             {
-                var newDataField = new JobFields();
-                newDataField.Type = _listEntity[nrCol].ValueType.ToString();
-                newDataField.Name = column.Name;
-                newDataField.Value = rowOrder.Cells[column.Name].Value.ToString();
+                var newDataField = new JobFields
+                {
+                    Type = _listEntity[nrCol].ValueType.ToString(),
+                    Name = column.Name,
+                    Value = rowOrder.Cells[column.Name].Value.ToString()
+                };
                 newJob.Add(nrCol.ToString(), newDataField);
                 nrCol++;
             }
-            htmlData.listJobs.Add(newJob);
+            htmlData.ListJobs.Add(newJob);
         }
         
         return htmlData;
@@ -1121,7 +1123,7 @@ public partial class FormMain : Form
             rootNode.AppendChild(nodeTemplate);
 
             var nrJob = 1;
-            foreach (var job in jobs.listJobs)
+            foreach (var job in jobs.ListJobs)
             {
                 XmlNode jobNode = xmlDoc.CreateElement(XML_DOCUMENT);
                 XmlAttribute titleAttribute = xmlDoc.CreateAttribute(XML_DOCUMENT_ID);
@@ -1211,18 +1213,62 @@ public partial class FormMain : Form
         catch { }
     }
     
-    private Random _random = new Random();
+    private readonly Random _random = new Random();
 
     private string RandomString(int nrTrack, int lenTrack)
     {
-        string chars;
-
-        if (nrTrack == 1)
-            chars = TRACK1_VALID_CHAR;
-        else
-            chars = TRACK23_VALID_CHAR;
+        var chars = nrTrack == 1 ? TRACK1_VALID_CHAR : TRACK23_VALID_CHAR;
 
         return new string(Enumerable.Repeat(chars, lenTrack)
             .Select(s => s[_random.Next(s.Length)]).ToArray());
+    }
+    
+    private async void CancelJob_Click(object sender, EventArgs e)
+    {
+
+        var api = new IntegrationApi(GetUrl());
+        {
+            var request = new CancelJobByCorrelationIdRequest
+            {
+                CorrelationIds = new()
+                {
+                    _saveCorrelationId
+                },
+                JobTemplateName = comboTemplates.Text
+            };
+
+            var response = api.CancelJobsByCorrelationIdAsync(request);
+            response.Result.ForEach(Console.WriteLine);
+        }
+
+
+
+
+        // using HttpClient client = new HttpClient();
+        // client.DefaultRequestHeaders.Authorization =
+        //     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "TOKEN_QUI");
+        //
+        // string url = "http://192.168.3.144:5000/aida/v1/workflow-scheduler/workflows/_cancel";
+        //
+        // // Corpo della POST (adatta i campi a quello che si aspetta l’API)
+        // var request = new CancelJobByCorrelationIdRequest
+        // {
+        //     CorrelationIds = new()
+        //     {
+        //         _saveCorrelationId
+        //     },
+        //     JobTemplateName = "Test OeSD"
+        // };
+        //
+        // string json = JsonSerializer.Serialize(request);
+        // var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //
+        // HttpResponseMessage response = await client.PostAsync(url, content);
+        //
+        // string responseBody = await response.Content.ReadAsStringAsync();
+        //
+        // Console.WriteLine($"Status: {response.StatusCode}");
+        // Console.WriteLine($"Body: {responseBody}");
+
     }
 }
