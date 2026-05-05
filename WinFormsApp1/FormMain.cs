@@ -96,8 +96,8 @@ public partial class FormMain : Form
     private void FormMain_Load(object sender, EventArgs e)
     {
         this.Text += (@"  -  " + Assembly.GetExecutingAssembly().GetName().Version);
-        
-        lbWebhookIp.Text = $@"IP PC: {GetLocalIPAddress()}";
+
+        lbWebhookIp.Text = GetLocalIPAddress(); //$@"IP PC: {GetLocalIPAddress()}";
         
         _defautlImage ??= picImageToPrint.Image;
     }
@@ -355,7 +355,6 @@ public partial class FormMain : Form
         try
         {
             var localIpAddress = FormMain.GetLocalIPAddress();
-            var wb = _webHost.CreateHost(localIpAddress, 4);
             _webHost.StartWebHook();
 
             btStartWebHook.BackColor = Color.LightGreen;

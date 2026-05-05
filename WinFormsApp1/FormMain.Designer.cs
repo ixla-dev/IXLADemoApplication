@@ -135,7 +135,7 @@ partial class FormMain
         // 
         btStartWebHook.Location = new System.Drawing.Point(16, 22);
         btStartWebHook.Name = "btStartWebHook";
-        btStartWebHook.Size = new System.Drawing.Size(95, 40);
+        btStartWebHook.Size = new System.Drawing.Size(95, 36);
         btStartWebHook.TabIndex = 5;
         btStartWebHook.Text = "Start Webhook Server";
         btStartWebHook.UseVisualStyleBackColor = true;
@@ -500,9 +500,9 @@ partial class FormMain
         // 
         // lbWebhookIp
         // 
-        lbWebhookIp.Location = new System.Drawing.Point(0, 74);
+        lbWebhookIp.Location = new System.Drawing.Point(0, 71);
         lbWebhookIp.Name = "lbWebhookIp";
-        lbWebhookIp.Size = new System.Drawing.Size(128, 20);
+        lbWebhookIp.Size = new System.Drawing.Size(128, 23);
         lbWebhookIp.TabIndex = 6;
         lbWebhookIp.Text = "0.0.0.0";
         lbWebhookIp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
