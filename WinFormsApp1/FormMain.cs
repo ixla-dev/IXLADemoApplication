@@ -710,6 +710,7 @@ public partial class FormMain : Form
     private int _correlationId = 0;
     private void btProcessCard_Click(object sender, EventArgs e)
     {
+        btProcessCard.Enabled = false;
         int idxCombo = comboTemplates.SelectedIndex;
        
         // Build the string for create the INSERT INTO DB command
@@ -775,6 +776,7 @@ public partial class FormMain : Form
             // Execute the command (add item at DB) 
             _deviceDb.ExecuteCmd();
         }
+        btProcessCard.Enabled = true;
     }
 
     private void btProcessOrder_Click(object sender, EventArgs e)

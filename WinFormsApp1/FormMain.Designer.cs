@@ -87,7 +87,7 @@ partial class FormMain
         btConnect.Location = new System.Drawing.Point(536, 1);
         btConnect.Name = "btConnect";
         btConnect.Size = new System.Drawing.Size(95, 35);
-        btConnect.TabIndex = 0;
+        btConnect.TabIndex = 2;
         btConnect.Text = "Connect";
         btConnect.UseVisualStyleBackColor = false;
         btConnect.Click += btConnect_Click;
@@ -133,9 +133,9 @@ partial class FormMain
         // 
         // btStartWebHook
         // 
-        btStartWebHook.Location = new System.Drawing.Point(16, 22);
+        btStartWebHook.Location = new System.Drawing.Point(6, 22);
         btStartWebHook.Name = "btStartWebHook";
-        btStartWebHook.Size = new System.Drawing.Size(95, 36);
+        btStartWebHook.Size = new System.Drawing.Size(116, 48);
         btStartWebHook.TabIndex = 5;
         btStartWebHook.Text = "Start Webhook Server";
         btStartWebHook.UseVisualStyleBackColor = true;
@@ -143,9 +143,9 @@ partial class FormMain
         // 
         // btResumeFeeder
         // 
-        btResumeFeeder.Location = new System.Drawing.Point(648, 123);
+        btResumeFeeder.Location = new System.Drawing.Point(648, 120);
         btResumeFeeder.Name = "btResumeFeeder";
-        btResumeFeeder.Size = new System.Drawing.Size(147, 23);
+        btResumeFeeder.Size = new System.Drawing.Size(147, 32);
         btResumeFeeder.TabIndex = 7;
         btResumeFeeder.Text = "Resume Feeder Empty";
         btResumeFeeder.UseVisualStyleBackColor = true;
@@ -164,9 +164,9 @@ partial class FormMain
         // btStartProcess
         // 
         btStartProcess.Enabled = false;
-        btStartProcess.Location = new System.Drawing.Point(27, 170);
+        btStartProcess.Location = new System.Drawing.Point(27, 156);
         btStartProcess.Name = "btStartProcess";
-        btStartProcess.Size = new System.Drawing.Size(95, 40);
+        btStartProcess.Size = new System.Drawing.Size(95, 50);
         btStartProcess.TabIndex = 10;
         btStartProcess.Text = "Start Scheduler";
         btStartProcess.UseVisualStyleBackColor = true;
@@ -174,10 +174,8 @@ partial class FormMain
         // 
         // cbNoLaser
         // 
-        cbNoLaser.Checked = true;
-        cbNoLaser.CheckState = System.Windows.Forms.CheckState.Checked;
         cbNoLaser.Enabled = false;
-        cbNoLaser.Location = new System.Drawing.Point(141, 179);
+        cbNoLaser.Location = new System.Drawing.Point(138, 170);
         cbNoLaser.Name = "cbNoLaser";
         cbNoLaser.Size = new System.Drawing.Size(134, 24);
         cbNoLaser.TabIndex = 11;
@@ -187,9 +185,9 @@ partial class FormMain
         // btStopProcess
         // 
         btStopProcess.Enabled = false;
-        btStopProcess.Location = new System.Drawing.Point(27, 220);
+        btStopProcess.Location = new System.Drawing.Point(27, 218);
         btStopProcess.Name = "btStopProcess";
-        btStopProcess.Size = new System.Drawing.Size(95, 40);
+        btStopProcess.Size = new System.Drawing.Size(95, 50);
         btStopProcess.TabIndex = 12;
         btStopProcess.Text = "Stop Scheduler";
         btStopProcess.UseVisualStyleBackColor = true;
@@ -210,6 +208,7 @@ partial class FormMain
         dgvEntity.AllowUserToAddRows = false;
         dgvEntity.AllowUserToResizeRows = false;
         dgvEntity.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+        dgvEntity.ColumnHeadersHeight = 28;
         dgvEntity.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { Type, Name, UniqueEntityName, Value, ImageToPrint, PathImage });
         dgvEntity.Enabled = false;
         dgvEntity.Location = new System.Drawing.Point(297, 170);
@@ -287,9 +286,9 @@ partial class FormMain
         // 
         // btDefaultString
         // 
-        btDefaultString.Location = new System.Drawing.Point(165, 5);
+        btDefaultString.Location = new System.Drawing.Point(140, 4);
         btDefaultString.Name = "btDefaultString";
-        btDefaultString.Size = new System.Drawing.Size(75, 38);
+        btDefaultString.Size = new System.Drawing.Size(100, 51);
         btDefaultString.TabIndex = 18;
         btDefaultString.Text = "Set Default String";
         btDefaultString.UseVisualStyleBackColor = true;
@@ -325,9 +324,9 @@ partial class FormMain
         // 
         // btDefaultImage
         // 
-        btDefaultImage.Location = new System.Drawing.Point(164, 5);
+        btDefaultImage.Location = new System.Drawing.Point(140, 3);
         btDefaultImage.Name = "btDefaultImage";
-        btDefaultImage.Size = new System.Drawing.Size(75, 38);
+        btDefaultImage.Size = new System.Drawing.Size(100, 51);
         btDefaultImage.TabIndex = 17;
         btDefaultImage.Text = "Set Default Image";
         btDefaultImage.UseVisualStyleBackColor = true;
@@ -337,7 +336,7 @@ partial class FormMain
         // 
         picImageToPrint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         picImageToPrint.Image = ((System.Drawing.Image)resources.GetObject("picImageToPrint.Image"));
-        picImageToPrint.Location = new System.Drawing.Point(54, 56);
+        picImageToPrint.Location = new System.Drawing.Point(54, 60);
         picImageToPrint.Name = "picImageToPrint";
         picImageToPrint.Size = new System.Drawing.Size(143, 104);
         picImageToPrint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -356,9 +355,9 @@ partial class FormMain
         // btProcessCard
         // 
         btProcessCard.Enabled = false;
-        btProcessCard.Location = new System.Drawing.Point(167, 220);
+        btProcessCard.Location = new System.Drawing.Point(168, 218);
         btProcessCard.Name = "btProcessCard";
-        btProcessCard.Size = new System.Drawing.Size(95, 40);
+        btProcessCard.Size = new System.Drawing.Size(95, 50);
         btProcessCard.TabIndex = 16;
         btProcessCard.Text = "Process Card";
         btProcessCard.UseVisualStyleBackColor = true;
@@ -383,9 +382,9 @@ partial class FormMain
         // btAddToOrder
         // 
         btAddToOrder.Enabled = false;
-        btAddToOrder.Location = new System.Drawing.Point(420, 496);
+        btAddToOrder.Location = new System.Drawing.Point(420, 494);
         btAddToOrder.Name = "btAddToOrder";
-        btAddToOrder.Size = new System.Drawing.Size(95, 40);
+        btAddToOrder.Size = new System.Drawing.Size(95, 50);
         btAddToOrder.TabIndex = 18;
         btAddToOrder.Text = "Add to Orders Table";
         btAddToOrder.UseVisualStyleBackColor = true;
@@ -394,9 +393,9 @@ partial class FormMain
         // btProcessOrder
         // 
         btProcessOrder.Enabled = false;
-        btProcessOrder.Location = new System.Drawing.Point(27, 496);
+        btProcessOrder.Location = new System.Drawing.Point(27, 494);
         btProcessOrder.Name = "btProcessOrder";
-        btProcessOrder.Size = new System.Drawing.Size(95, 40);
+        btProcessOrder.Size = new System.Drawing.Size(95, 50);
         btProcessOrder.TabIndex = 19;
         btProcessOrder.Text = "Process Orders";
         btProcessOrder.UseVisualStyleBackColor = true;
@@ -405,9 +404,9 @@ partial class FormMain
         // btClearOrder
         // 
         btClearOrder.Enabled = false;
-        btClearOrder.Location = new System.Drawing.Point(158, 496);
+        btClearOrder.Location = new System.Drawing.Point(158, 494);
         btClearOrder.Name = "btClearOrder";
-        btClearOrder.Size = new System.Drawing.Size(95, 40);
+        btClearOrder.Size = new System.Drawing.Size(95, 50);
         btClearOrder.TabIndex = 20;
         btClearOrder.Text = "Clear Orders Table";
         btClearOrder.UseVisualStyleBackColor = true;
@@ -416,9 +415,9 @@ partial class FormMain
         // btDeleteRowOrder
         // 
         btDeleteRowOrder.Enabled = false;
-        btDeleteRowOrder.Location = new System.Drawing.Point(289, 496);
+        btDeleteRowOrder.Location = new System.Drawing.Point(289, 494);
         btDeleteRowOrder.Name = "btDeleteRowOrder";
-        btDeleteRowOrder.Size = new System.Drawing.Size(95, 40);
+        btDeleteRowOrder.Size = new System.Drawing.Size(95, 50);
         btDeleteRowOrder.TabIndex = 21;
         btDeleteRowOrder.Text = "Delete Row Order";
         btDeleteRowOrder.UseVisualStyleBackColor = true;
@@ -437,9 +436,9 @@ partial class FormMain
         // btImportOrder
         // 
         btImportOrder.Enabled = false;
-        btImportOrder.Location = new System.Drawing.Point(593, 496);
+        btImportOrder.Location = new System.Drawing.Point(593, 494);
         btImportOrder.Name = "btImportOrder";
-        btImportOrder.Size = new System.Drawing.Size(95, 40);
+        btImportOrder.Size = new System.Drawing.Size(95, 50);
         btImportOrder.TabIndex = 24;
         btImportOrder.Text = "Import Orders List";
         btImportOrder.UseVisualStyleBackColor = true;
@@ -448,9 +447,9 @@ partial class FormMain
         // btExportOrder
         // 
         btExportOrder.Enabled = false;
-        btExportOrder.Location = new System.Drawing.Point(700, 496);
+        btExportOrder.Location = new System.Drawing.Point(700, 494);
         btExportOrder.Name = "btExportOrder";
-        btExportOrder.Size = new System.Drawing.Size(95, 40);
+        btExportOrder.Size = new System.Drawing.Size(95, 50);
         btExportOrder.TabIndex = 23;
         btExportOrder.Text = "Export Orders List";
         btExportOrder.UseVisualStyleBackColor = true;
@@ -500,7 +499,7 @@ partial class FormMain
         // 
         // lbWebhookIp
         // 
-        lbWebhookIp.Location = new System.Drawing.Point(0, 71);
+        lbWebhookIp.Location = new System.Drawing.Point(0, 73);
         lbWebhookIp.Name = "lbWebhookIp";
         lbWebhookIp.Size = new System.Drawing.Size(128, 23);
         lbWebhookIp.TabIndex = 6;
@@ -519,12 +518,14 @@ partial class FormMain
         // 
         // FormMain
         // 
+        AcceptButton = btConnect;
         AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(823, 806);
         Controls.Add(CancelJob);
         Controls.Add(gbWebhook);
         Controls.Add(cbCreateBadgeTrack);
+        Controls.Add(panelImage);
         Controls.Add(btDown);
         Controls.Add(btUp);
         Controls.Add(btImportOrder);
@@ -548,7 +549,6 @@ partial class FormMain
         Controls.Add(label1);
         Controls.Add(tbIpAddress);
         Controls.Add(btConnect);
-        Controls.Add(panelImage);
         Controls.Add(panelString);
         Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
         Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -624,6 +624,6 @@ partial class FormMain
     private System.Windows.Forms.Button btUp;
     private System.Windows.Forms.Button btDown;
     private System.Windows.Forms.CheckBox cbCreateBadgeTrack;
-    private GroupBox gbWebhook;
+    private System.Windows.Forms.GroupBox gbWebhook;
     private System.Windows.Forms.Label lbWebhookIp;
 }
