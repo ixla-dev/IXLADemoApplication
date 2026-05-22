@@ -87,7 +87,7 @@ partial class FormMain
         btConnect.Location = new System.Drawing.Point(536, 1);
         btConnect.Name = "btConnect";
         btConnect.Size = new System.Drawing.Size(95, 35);
-        btConnect.TabIndex = 2;
+        btConnect.TabIndex = 1;
         btConnect.Text = "Connect";
         btConnect.UseVisualStyleBackColor = false;
         btConnect.Click += btConnect_Click;
@@ -98,7 +98,7 @@ partial class FormMain
         tbIpAddress.Location = new System.Drawing.Point(402, 8);
         tbIpAddress.Name = "tbIpAddress";
         tbIpAddress.Size = new System.Drawing.Size(114, 27);
-        tbIpAddress.TabIndex = 1;
+        tbIpAddress.TabIndex = 2;
         tbIpAddress.Text = "0.0.0.0";
         tbIpAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
         // 
@@ -125,9 +125,9 @@ partial class FormMain
         comboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         comboTemplates.Enabled = false;
         comboTemplates.FormattingEnabled = true;
-        comboTemplates.Location = new System.Drawing.Point(440, 57);
+        comboTemplates.Location = new System.Drawing.Point(440, 54);
         comboTemplates.Name = "comboTemplates";
-        comboTemplates.Size = new System.Drawing.Size(121, 28);
+        comboTemplates.Size = new System.Drawing.Size(191, 28);
         comboTemplates.TabIndex = 4;
         comboTemplates.SelectedIndexChanged += comboTemplates_SelectedIndexChanged;
         // 
@@ -175,9 +175,9 @@ partial class FormMain
         // cbNoLaser
         // 
         cbNoLaser.Enabled = false;
-        cbNoLaser.Location = new System.Drawing.Point(138, 170);
+        cbNoLaser.Location = new System.Drawing.Point(142, 170);
         cbNoLaser.Name = "cbNoLaser";
-        cbNoLaser.Size = new System.Drawing.Size(134, 24);
+        cbNoLaser.Size = new System.Drawing.Size(130, 24);
         cbNoLaser.TabIndex = 11;
         cbNoLaser.Text = "Disable Laser Source";
         cbNoLaser.UseVisualStyleBackColor = true;
