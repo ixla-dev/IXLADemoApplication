@@ -200,11 +200,9 @@ public partial class FormMain : Form
         if (state.Status == WorkflowSchedulerStatus.Running || state.Status == WorkflowSchedulerStatus.FeederEmpty)
         {
             btStartProcess.Enabled = false;
-            btProcessOrder.Enabled = true;
         }
         else
         {
-            btStartProcess.Enabled = true;
             btProcessCard.Enabled = false;
             btProcessOrder.Enabled = false;
         }
@@ -271,7 +269,6 @@ public partial class FormMain : Form
                         btStartProcess.Enabled = false;
                         cbNoLaser.Enabled = false;
                         btProcessCard.Enabled = true;
-                        btProcessOrder.Enabled = true;
                         btStopProcess.Enabled = true;
                     }
 
@@ -520,12 +517,12 @@ public partial class FormMain : Form
     {
         dgvEntity.Enabled = enabled;
         dgvOrder.Enabled = enabled;
+        btProcessOrder.Enabled = enabled;
         btClearOrder.Enabled = enabled;
         btDeleteRowOrder.Enabled = enabled;
         btAddToOrder.Enabled = enabled;
         btImportOrder.Enabled = enabled;
         btExportOrder.Enabled = enabled;
-        btProcessOrder.Enabled = btStartProcess.Enabled ? false : enabled;
     }
 
 
