@@ -952,7 +952,7 @@ public partial class FormMain : Form
     {
         var ofd = new OpenFileDialog();
         ofd.Title = "Import Orders";
-        ofd.Filter = "Orders files (*.html)|*.html";
+        ofd.Filter = "Orders files (*.xml)|*.xml";
         if (ofd.ShowDialog() == DialogResult.OK)
         {
             LoadJobsInXmlFile(ofd.FileName);
@@ -999,7 +999,7 @@ public partial class FormMain : Form
                                     XmlAttributeCollection dataAttribs = data.Attributes;
                                     // foreach (XmlAttribute dataAttrib in dataAttribs)
                                     {
-                                        dgvOrder.Rows[newRow].Cells[iiCol].Value = dataAttribs[XML_DATAFIELD_VALUE].Value;
+                                        dgvOrder.Rows[newRow].Cells[dataAttribs[XML_DATAFIELD_NAME].Value].Value = dataAttribs[XML_DATAFIELD_VALUE].Value;
                                         iiCol++;
                                     }
 
@@ -1082,7 +1082,7 @@ public partial class FormMain : Form
     const string XML_JOB_NAME = "TemplateName";
     const string XML_DOCUMENT = "Document";
     const string XML_DOCUMENT_ID = "Id";
-    const string XML_DATAFIELD = "DataFiled";
+    const string XML_DATAFIELD = "DataField";
     const string XML_DATAFIELD_NAME = "Name";
     const string XML_DATAFIELD_TYPE = "Type";
     const string XML_DATAFIELD_VALUE = "Value";
@@ -1157,7 +1157,7 @@ public partial class FormMain : Form
             
         var sfd = new SaveFileDialog();
         sfd.Title = @"Export Orders";
-        sfd.Filter = @"Orders files (*.html)|*.html";
+        sfd.Filter = @"Orders files (*.xml)|*.xml";
         if (sfd.ShowDialog() == DialogResult.OK)
         {
             if (CreateHeaderFile(sfd.FileName))
